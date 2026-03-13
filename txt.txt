@@ -1,0 +1,30 @@
+Purpose	Hex
+Primary	#0D9488
+Primary Hover	#0F766E
+Background	#F8FAFC
+Card	#FFFFFF
+Text	#0F172A
+
+
+
+Purpose	Hex
+Primary	#7C3AED
+Primary Hover	#6D28D9
+Background	#FAFAFA
+Card	#FFFFFF
+Text	#111827
+Muted	#6B7280
+Border	#E5E7EB
+Error	#DC2626
+
+
+Purpose	Hex
+Primary	#F59E0B
+Primary Hover	#D97706
+Background	#111827
+Card	#1F2933
+Text	#F9FAFB
+Muted	#9CA3AF
+Border	#374151
+
+
