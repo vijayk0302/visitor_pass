@@ -48,10 +48,12 @@ export const loginUser = async (req, res) => {
       process.env.JWT_SECRET,
     );
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "strict",
-    });
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/",
+});;
 
     res.status(201).json({
       msg: "User logged in",
