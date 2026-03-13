@@ -26,23 +26,22 @@ const Singlepass = () => {
     const fetch = async () => {
         const res = await api.get(`/api/passes/view/${id}`)
         setdets(res.data)
-        console.log(res.data);
+       
     }
 
 
 
     return (
-        <div className='w-[85%] sm:w-4/5'>
+        <div className='w-[85%] sm:w-4/5 p-5'>
             <div
                 ref={targetRef}
-                className="max-w-sm mx-auto mt-25 rounded-xl shadow-lg  p-4"
+                className="max-w-sm mx-auto m-25 rounded-xl shadow-lg  p-2"
                 style={{
                     backgroundColor: "#ffffff",
                     border: "1px solid #d1d5db",
                     color: "#111827"
                 }}
             >
-
                 <div className="text-center  border-b pb-2 mb-3">
                     <h2
                         className="text-xl font-bold"
@@ -51,11 +50,11 @@ const Singlepass = () => {
                         VISITOR PASS
                     </h2>
                     <div className='flex justify-center '>
-                        <img className='mt-2 rounded-full object-cover size-35' src={dets.details?.appointment?.photo} alt="" />
+                        <img className=' rounded-full object-cover size-35' src={dets.details?.appointment?.photo} alt="" />
 
                     </div>
                 </div>
-                <div className='flex space-x-5'>
+                <div className='flex space-x-3'>
                     <div className="flex justify-center mb-4">
                         <img
                             src={dets.pass?.qrCode}
@@ -63,7 +62,7 @@ const Singlepass = () => {
                             className="w-36 h-36"
                         />
                     </div>
-                    <div className="space-y-3 text-sm">
+                    <div className="space-y-2 text-sm">
                         <p>
                             <span className="font-extrabold ">Name:</span>{" "}
                             {dets.details?.appointment?.visitor?.name}
