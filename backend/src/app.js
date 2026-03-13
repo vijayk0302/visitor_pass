@@ -16,7 +16,8 @@ const app=express();
 
 app.use(cors({
   origin: "https://visitor-pass-ui.vercel.app",
-  credentials: true
+  credentials: true,
+  methods: ["GET","POST","PUT","DELETE"],
 }));
 
 
