@@ -1,80 +1,40 @@
-import { NavLink } from "react-router-dom";
-import { FaLaptop, FaRegIdBadge, FaCalendarAlt } from "react-icons/fa";
-import { ImProfile } from "react-icons/im";
-import { MdAdminPanelSettings } from "react-icons/md";
-import { FaUser, FaPerson } from "react-icons/fa6";
-import { IoIosAnalytics } from "react-icons/io";
-import { useNavigate } from 'react-router-dom';
-
+import { useState } from "react";
+import Sidebarmenu from "./Sidebarmenu";
 
 export default function Sidebar() {
-  const navigate = useNavigate()
 
+  const [isopen, setIsopen] = useState(false)
 
   return (
     <>
-      <aside className="w-[15%] sm:w-1/5 bg-slate-800 min-h-screen text-white p-4">
+      <button
+        onClick={() => setIsopen(!isopen)}
+        className="fixed top-4 left-4 z-50 p-2 bg-gray-900 text-white rounded-md md:hidden"
+      >
+        {isopen ? '✕' : '☰'}
+      </button>
 
-        <h2 className=" sm:text-2xl text-sm sm:text-center font-bold my-2">visi.co</h2>
+      {isopen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-30 md:hidden"
+          onClick={() => setIsopen(false)}
+        />
+      )}
 
-        <nav className="flex flex-col space-y-4 gap-2 mt-7.5">
-          <div className="flex items-center space-x-3">
-            <FaLaptop className="text-xl shrink-0" onClick={()=>navigate('/dashboard')} />
-            <span className="hidden lg:block sm:block">
-              <NavLink className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/dashboard"> Dashboard</NavLink>
-            </span>
-          </div>
 
-          <div className="flex items-center space-x-3 ">
-            <MdAdminPanelSettings className="text-xl shrink-0" onClick={()=>navigate('/admin')}  />
-            <span className="hidden lg:block sm:block">
-              <NavLink className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/admin">Admin</NavLink>
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <ImProfile className="text-xl shrink-0" onClick={()=>navigate('/profile')} />
-            <span className="hidden lg:block sm:block">
-              <NavLink className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/profile">Profile</NavLink>
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <FaUser className="text-xl shrink-0"  onClick={()=>navigate('/employees')}  />
-            <span className="hidden lg:block sm:block">
-              <NavLink className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/employees">Employees</NavLink>
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <FaPerson className="text-xl shrink-0" onClick={()=>navigate('/visitors')}  />
-            <span className="hidden lg:block sm:block">
-              <NavLink className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/visitors">Visitors</NavLink>
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <FaCalendarAlt className="text-xl shrink-0" onClick={()=>navigate('/appointment')} />
-            <span className="hidden lg:block sm:block">
-              <NavLink className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/appointment">All Appointment</NavLink>
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <FaRegIdBadge className="text-xl shrink-0" onClick={()=>navigate('/passes')}/>
-            <span className="hidden lg:block sm:block">
-              <NavLink className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/passes">Passes</NavLink>
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <IoIosAnalytics className="text-xl shrink-0" onClick={()=>navigate('/log')}/>
-            <span className="hidden lg:block sm:block">
-              <NavLink className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/log">Visitor's Logs</NavLink>
-            </span>
-          </div>
-        </nav>
+      <aside
+        className={`
+        bg-slate-800 text-white min-h-screen p-4
+        fixed top-0 left-0 z-40
+        w-64 md:w-1/5
+        transform transition-transform duration-300
+        ${isopen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 md:static
+        `}
+      >
+        <Sidebarmenu setIsopen={setIsopen}  />
       </aside>
+
     </>
   );
 }

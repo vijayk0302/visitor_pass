@@ -17,7 +17,7 @@ const Editemployee = () => {
    const fetchUser = async () => {
     const res = await api.get(`/api/users/${id}`);
     setUser(res.data.user);
-    console.log(res.data.user)
+    
   }
   const handlesubmit=async(e)=>{
     e.preventDefault();
@@ -31,7 +31,7 @@ const Editemployee = () => {
   },[id])
 
   return (
-    <div className="w-[85%] sm:w-4/5 p-6 flex justify-center items-center flex-col">
+    <div className="w-full p-6 flex justify-center items-center flex-col">
       <div className='w-fit p-2 rounded-xl shadow-lg border'>
       <h2 className="text-xl text-center font-bold mb-4">Edit Employee Details</h2>
 

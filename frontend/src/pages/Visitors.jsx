@@ -28,7 +28,7 @@ const Visitors = () => {
 
 
   return (
-    <div className='w-[85%] sm:w-4/5'>
+    <div className='w-full'>
       <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
         <h1 className='font-bold text-sm sm:text-xl'>Visitors</h1>
         <Logoutbtn />

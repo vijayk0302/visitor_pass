@@ -32,7 +32,7 @@ const Singlepass = () => {
 
 
     return (
-        <div className='w-[85%] sm:w-4/5 p-5'>
+        <div className='w-full'>
             <div
                 ref={targetRef}
                 className="max-w-sm mx-auto m-25 rounded-xl shadow-lg  p-2"
