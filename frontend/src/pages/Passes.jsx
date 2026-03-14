@@ -6,16 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs'
 
 export const Passes = () => {
- const  navigate=useNavigate()
+    const navigate = useNavigate()
     const [passes, setPasses] = useState([])
 
     useEffect(() => {
         fetchallpasses()
     }, [])
+
     const fetchallpasses = async () => {
-        const res = await api.get('/api/passes')
+        const res = await api.get('/api/passes/all')
         setPasses(res.data.pass);
-       
     }
     return (
         <div className='w-full'>
@@ -50,7 +50,7 @@ export const Passes = () => {
                                     <td className="px-2 py-3 "> {dayjs(v.validFrom).format("HH:mm")} </td>
                                     <td className="px-2 py-3 "> {dayjs(v.validTo).format("HH:mm")} </td>
                                     <td className="px-2 py-3 "> <div className='flex space-x-4'>
-                                        <GrFormView  onClick={() => { navigate(`/passes/view/${v._id}`) }} className='text-blue-600 text-2xl cursor-pointer'/>
+                                        <GrFormView onClick={() => { navigate(`/passes/view/${v._id}`) }} className='text-blue-600 text-2xl cursor-pointer' />
                                     </div> </td>
                                 </tr>
                             ))

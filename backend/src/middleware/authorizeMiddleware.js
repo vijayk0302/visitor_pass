@@ -13,7 +13,6 @@ export const authorize = (...allowedRoles) => {
         message: "You do not have permission to access this resource",
       });
     }
-
     next();
   };
 };

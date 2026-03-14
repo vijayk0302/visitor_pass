@@ -23,8 +23,7 @@ const Appointmentfrom = () => {
             name: res.data.user.name,
             email: res.data.user.email,
         }))
-        console.log(res.data.user)
-
+       
     }
 
     const handlesubmit = async (e) => {

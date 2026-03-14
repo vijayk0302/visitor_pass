@@ -21,12 +21,12 @@ const Singlepass = () => {
     const fetchrole = async () => {
         const res = await api.get('api/users/me')
         setRole(res.data.user.role)
+        
     }
 
     const fetch = async () => {
-        const res = await api.get(`/api/passes/view/${id}`)
-        setdets(res.data)
-       
+        const pass = await api.get(`/api/passes/view/${id}`)
+        setdets(pass.data)      
     }
 
 

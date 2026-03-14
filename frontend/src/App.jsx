@@ -63,7 +63,7 @@ function App() {
               <Route path="/appointment" element={<Appointment />} />
             </Route>
 
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'security']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['admin',"employee", 'security']} />}>
               <Route path="/passes" element={<Passes />} />
             </Route>
 
@@ -79,7 +79,7 @@ function App() {
               <Route path="/my-pass/:id" element={<Listvisitorpass />} />
             </Route>
 
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'security','visitor']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['admin', 'security','employee','visitor']} />}>
               <Route path="/passes/view/:id" element={<Singlepass />} />
             </Route>
 

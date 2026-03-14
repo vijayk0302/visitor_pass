@@ -6,90 +6,117 @@ import { FaUser, FaPerson } from "react-icons/fa6";
 import { IoIosAnalytics } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 import api from "../api/api.js";
+import { useEffect, useState } from "react";
+
 
 
 const Sidebarmenu = ({ setIsopen }) => {
+  useEffect(() => {
+    fetchProfile()
+  }, [])
 
-  const handlelogbtn=async()=>{
+  const handlelogbtn = async () => {
     try {
       await api.patch("/api/auth/logout");
       window.location.href = "/login";
     } catch (err) {
       console.error("Logout failed", err);
     }
-    
   }
+  const [role, setRole] = useState(null)
+
+  const fetchProfile = async () => {
+    const res = await api.get(`/api/users/me`);
+    setRole(res.data.user.role);
+
+
+  };
 
   return (
     <>
-     
-       
-          <h2 className="text-2xl sm:text-4xl text-center font-bold my-2">visi.co</h2>
-          <nav className="flex flex-col space-y-4 gap-2 mt-7.5">
-            <div className="flex items-center space-x-3">
-              <FaLaptop className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/dashboard"> Dashboard</NavLink>
-              </span>
-            </div>
 
-            <div className="flex items-center space-x-3 ">
-              <MdAdminPanelSettings className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/admin">Admin</NavLink>
-              </span>
-            </div>
 
-            <div className="flex items-center space-x-3">
-              <ImProfile className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/profile">Profile</NavLink>
-              </span>
-            </div>
+      <h2 className="text-2xl sm:text-4xl text-center font-bold my-2">visi.co</h2>
+      <nav className="flex flex-col space-y-4 gap-2 mt-7.5">
 
-            <div className="flex items-center space-x-3">
-              <FaUser className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/employees">Employees</NavLink>
-              </span>
-            </div>
+        <div className="flex items-center space-x-3">
+          <FaLaptop className="text-xl shrink-0" />
+          <span >
+            <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/dashboard"> Dashboard</NavLink>
+          </span>
+        </div>
 
-            <div className="flex items-center space-x-3">
-              <FaPerson className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/visitors">Visitors</NavLink>
-              </span>
-            </div>
+        {role === 'admin' && (
+          <div className="flex items-center space-x-3 ">
+            <MdAdminPanelSettings className="text-xl shrink-0" />
+            <span >
+              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/admin">Admin</NavLink>
+            </span>
+          </div>
+        )}
 
-            <div className="flex items-center space-x-3">
-              <FaCalendarAlt className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/appointment">All Appointment</NavLink>
-              </span>
-            </div>
+        <div className="flex items-center space-x-3">
+          <ImProfile className="text-xl shrink-0" />
+          <span >
+            <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/profile">Profile</NavLink>
+          </span>
+        </div>
 
-            <div className="flex items-center space-x-3">
-              <FaRegIdBadge className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/passes">Passes</NavLink>
-              </span>
-            </div>
+        {(role === "admin") && (
+          <div className="flex items-center space-x-3">
+            <FaUser className="text-xl shrink-0" />
+            <span >
+              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/employees">Employees</NavLink>
+            </span>
+          </div>
 
-            <div className="flex items-center space-x-3">
-              <IoIosAnalytics className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/log">Visitor's Logs</NavLink>
-              </span>
-            </div>
+        )}
 
-            <div className="flex items-center space-x-3">
-              <CiLogout className="text-xl shrink-0" />
-              <span >
-                <NavLink onClick={handlelogbtn} >Logout</NavLink>
-              </span>
-            </div>
-          </nav>
-        
+        {(role === 'admin' || role === 'employee') && (
+          <div className="flex items-center space-x-3">
+            <FaPerson className="text-xl shrink-0" />
+            <span >
+              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/visitors">Visitors</NavLink>
+            </span>
+          </div>
+        )}
+
+        {(role === 'admin' || role === 'employee') && (
+          <div className="flex items-center space-x-3">
+            <FaCalendarAlt className="text-xl shrink-0" />
+            <span >
+              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/appointment">All Appointment</NavLink>
+            </span>
+          </div>
+        )}
+
+        {(role === 'admin' || role === 'employee' || role === 'security') && (
+          <div className="flex items-center space-x-3">
+            <FaRegIdBadge className="text-xl shrink-0" />
+            <span >
+              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/passes">Passes</NavLink>
+            </span>
+          </div>
+        )}
+
+        {(role === 'admin' || role === 'security') && (
+          <div className="flex items-center space-x-3">
+            <IoIosAnalytics className="text-xl shrink-0" />
+            <span >
+              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/log">Visitor's Logs</NavLink>
+            </span>
+          </div>
+
+        )}
+
+        <div className="flex items-center space-x-3">
+          <CiLogout className="text-xl shrink-0" />
+          <span >
+            <NavLink onClick={handlelogbtn} >Logout</NavLink>
+          </span>
+        </div>
+      </nav>
+
     </>
   )
 }

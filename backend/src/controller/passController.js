@@ -5,7 +5,7 @@ export const getallpass = async (req, res) => {
   try {
     const { role } = req.user;
     let pass;
-    if (role === "admin" || role === "employee") {
+    if (role === "admin" || role === "employee" ||role==='security') {
       pass = await passModel.find();
     } else {
       return res.status(403).json({ msg: "Forbidden" });
@@ -23,7 +23,7 @@ export const getpassbyid = async (req, res) => {
     const passId = req.params.id;
 
     let pass;
-    if (role === "admin" || role === "employee" || role==='visitor') {
+    if (role === "admin" || role === "employee" || role==='visitor' || role==='security') {
       pass = await passModel.findById(passId);
     } else if (role === "visitor") {
       pass = await passModel.findOne({

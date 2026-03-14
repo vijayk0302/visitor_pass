@@ -20,8 +20,8 @@ const Login = () => {
       const role = res.data.user.role;
 
       if (role === "admin") window.location.href = "/admin";
-      else if (role === "employee") window.location.href = "/dashboard";
-      else if (role === "security") window.location.href = "/dashboard";
+      else if (role === "employee") window.location.href = "/profile";
+      else if (role === "security") window.location.href = "/profile";
       else if (role === "visitor") window.location.href = "/profile";
 
     } catch (err) {

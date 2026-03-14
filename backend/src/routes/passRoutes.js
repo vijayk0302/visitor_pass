@@ -5,7 +5,7 @@ import { getallpass , getownpass, getpassbyid } from '../controller/passControll
 
 
 const passRoute=express.Router()
-passRoute.get('/',authenticate,authorize('admin','employee',"security",'visitor'),getallpass)
+passRoute.get('/all',authenticate,authorize('admin','employee',"security"),getallpass)
 
 passRoute.get('/visitor/my-passes/:id',authenticate,authorize('visitor'),getownpass)
 
