@@ -48,7 +48,7 @@ const Admin = () => {
     return (
         <div className='w-full'>
             <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-                <h1 className='font-bold text-sm sm:text-xl'>Admin's Dashboard</h1>
+                <h1 className='sm:ml-0 ml-9 font-bold text-sm sm:text-xl'>Admin's Dashboard</h1>
                 <Logoutbtn />
             </div>
             <div className='flex w-full flex-wrap p-4 gap-2 justify-between mt-3 '>

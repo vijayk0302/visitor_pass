@@ -26,14 +26,13 @@ const Login = () => {
 
     } catch (err) {
       setError(err.response?.data?.msg || "Login failed");
-
     }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${newbg})` }} >
-      <div className="w-fit h-fit md:w-100 bg-[#111827] p-6 flex flex-col shadow-lg  rounded-lg">
-        <h2 className="flex text-[#F9FAFB] font-extrabold mb-5 lg:text-2xl text-xl flex-col items-center ">Login</h2>
+      <div className="w-fit h-fit md:w-100 bg-[#111827] p-5 flex flex-col shadow-lg  rounded-lg">
+        <h2 className=" text-[#F9FAFB] font-extrabold mb-3 lg:text-2xl text-xl text-center ">Login</h2>
         <form onSubmit={handleLogin}>
           <span className="text-[#F9FAFB] text-sm mb-2 block">Email</span>
           <input
@@ -51,7 +50,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           {error && <p className="mt-2 mb-2 text-red-600">{error}</p>}
-          <button className="bg-[#F59E0B] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer" type="submit">Login</button>
+          <button className="hover:bg-[#f59f0bd8] bg-[#b77400] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer" type="submit">Login</button>
         </form>
       </div>
     </div>

@@ -30,10 +30,10 @@ const Appointment = () => {
   return (
     <div className='w-full'>
       <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-        <h1 className='font-bold text-sm sm:text-xl'>Appointments</h1>
+        <h1 className='sm:ml-0 ml-9 font-bold text-sm sm:text-xl'>Appointments</h1>
         <Logoutbtn />
       </div>
-      <div className='overflow-x-auto rounded-lg shadow-lg mt-6 p-2'>
+      <div className='overflow-x-auto rounded-lg shadow-lg mt-6 '>
         <table className='min-w-full rounded-xl border border-gray-100'>
           <thead className="bg-gray-300">
             <tr >

@@ -29,7 +29,7 @@ const Listvisitorpass = () => {
     return (
         <div className='w-full'>
             <div className="bg-gray-200 flex justify-between items-center shadow-lg p-4">
-                <h1 className="font-bold">your passes </h1>
+                <h1 className="sm:ml-0 ml-9 font-bold">your passes </h1>
                 <Logoutbtn />
             </div>
             <div className='overflow-x-auto mt-6 p-2'>

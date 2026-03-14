@@ -14,6 +14,7 @@ function ScanQR() {
     })
 
     scanner.render(async (decodedText) => {
+      scanner.clear();
 
       try {
 
@@ -40,7 +41,7 @@ function ScanQR() {
   }, [])
 
 
-  return <div id="reader"></div>;
+  return <div className="w-full mt-20 sm:mt-0" id="reader"></div>;
 }
 
 export default ScanQR;

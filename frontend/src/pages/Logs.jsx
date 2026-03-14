@@ -23,12 +23,13 @@ export const Logs = () => {
     return (
         <div className='w-full'>
             <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-                <h1 className='font-bold text-sm sm:text-xl'>Visitor's Logs</h1>
+                <h1 className='sm:ml-0 ml-9 font-bold text-sm sm:text-xl'>Visitor's Logs</h1>
                 <Logoutbtn />
             </div>
             <div className='mt-3 mx-6'>
                 <button onClick={()=>navigate('/scanner')} className="px-4 py-2 rounded-lg text-white text-lg bg-blue-700 hover:bg-blue-800 transition ">Scan</button>
             </div>
+            
             <div className='overflow-x-auto rounded-lg shadow-lg mt-3 '>
                 <table className='min-w-full rounded-xl border border-gray-100'>
                     <thead className="bg-gray-300">

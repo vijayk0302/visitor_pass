@@ -9,7 +9,7 @@ export default function Sidebar() {
     <>
       <button
         onClick={() => setIsopen(!isopen)}
-        className="fixed top-4 left-4 z-50 p-2 bg-gray-900 text-white rounded-md md:hidden"
+        className="absolute top-3 left-4 z-50 p-2 text-lg text-black rounded-md md:hidden"
       >
         {isopen ? '✕' : '☰'}
       </button>
