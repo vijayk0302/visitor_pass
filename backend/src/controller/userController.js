@@ -1,3 +1,4 @@
+import { approvalEmail } from "../middleware/EmailConfig/approvalEmail.js";
 import { userModel } from "../models/userModel.js";
 
 export const getalluser = async (req, res) => {
@@ -38,6 +39,7 @@ export const updateuser = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await userModel.findByIdAndUpdate(id, req.body, {
+      returnDocument: "after",
       runValidators: true,
     });
 
@@ -45,6 +47,10 @@ export const updateuser = async (req, res) => {
       return res.status(404).json({
         msg: "user not found",
       });
+    }
+    
+    if (user.status === "active") {
+      await approvalEmail(user.email, user.name);
     }
 
     res.status(200).json({

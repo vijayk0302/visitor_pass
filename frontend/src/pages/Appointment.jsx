@@ -24,6 +24,7 @@ const Appointment = () => {
   const approveappointment=async(id)=>{
     await api.patch(`/api/appointments/update/${id}`)
     fetctalluser()
+    alert('appointmet approved and pass created')
 
   }
 
@@ -34,15 +35,15 @@ const Appointment = () => {
         <Logoutbtn />
       </div>
       <div className='overflow-x-auto rounded-lg shadow-lg mt-6 '>
-        <table className='min-w-full rounded-xl border border-gray-100'>
+        <table className='min-w-full  rounded-xl border border-gray-100'>
           <thead className="bg-gray-300">
             <tr >
               <th className="px-2 py-3 border-b  text-left ">Name</th>
               <th className="px-2 py-3 border-b  text-left ">Email</th>
               <th className="px-2 py-3 border-b text-left ">photo</th>
               <th className="px-2 py-3 border-b  text-left ">phone</th>
-              <th className="px-2 py-3 border-b  text-left ">Id proof</th>
-              <th className="px-2 py-3 border-b  text-left ">Purpose</th>
+              <th className="px-2 py-3 border-b  whitespace-nowrap text-left ">Id proof</th>
+              <th className="px-2 py-3 border-b whitespace-nowrap text-left ">Purpose</th>
               <th className="px-2 py-3 border-b text-left ">Status</th>
               <th className="px-2 py-3 border-b text-left ">Action</th>
             </tr>
@@ -59,8 +60,8 @@ const Appointment = () => {
                   <td className="px-2 py-3 "> {v.visitor.email} </td>
                   <td className="px-2 py-3 "> <img className='w-10 h-10 rounded-full' src={v.photo} alt="" />{v.role} </td>
                   <td className="px-2 py-3 "> {v.phone} </td>
-                  <td className="px-2 py-3 "> {v.idproof} </td>
-                  <td className="px-2 py-3 "> {v.purpose} </td>
+                  <td className="px-2 whitespace-nowrap py-3 "> {v.idproof} </td>
+                  <td className="px-2 whitespace-nowrap py-3 "> {v.purpose} </td>
                   <td className="px-2 py-3 "> {v.status} </td>
                   <td className="px-2 py-3 "> <div className='flex space-x-4'>
                     <FaUserEdit  onClick={()=>approveappointment(v._id)} className={statuscolor[v.status]||'text-black '} />

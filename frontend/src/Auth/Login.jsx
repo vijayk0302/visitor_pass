@@ -50,7 +50,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           {error && <p className="mt-2 mb-2 text-red-600">{error}</p>}
-          <button className="hover:bg-[#f59f0bd8] bg-[#b77400] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer" type="submit">Login</button>
+          <button className=" bg-[#F59E0B] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer" type="submit">Login</button>
         </form>
       </div>
     </div>

@@ -28,11 +28,11 @@ export const Passes = () => {
                 <table className='min-w-full rounded-xl border border-gray-100'>
                     <thead className="bg-gray-300">
                         <tr >
-                            <th className="px-2 py-3 border-b  text-left ">Day of visit</th>
-                            <th className="px-2 py-3 border-b text-left ">issued by</th>
+                            <th className="px-2 py-3 border-b whitespace-nowrap text-left ">Day of visit</th>
+                            <th className="px-2 py-3 border-b whitespace-nowrap text-left ">issued by</th>
                             <th className="px-2 py-3 border-b text-left ">Status</th>
-                            <th className="px-2 py-3 border-b  text-left ">Valid from</th>
-                            <th className="px-2 py-3 border-b text-left ">Valid to</th>
+                            <th className="px-2 py-3 border-b whitespace-nowrap text-left ">Valid from</th>
+                            <th className="px-2 py-3 border-b whitespace-nowrap text-left ">Valid to</th>
                             <th className="px-2 py-3 border-b text-left ">Action</th>
                         </tr>
                     </thead>
@@ -44,7 +44,7 @@ export const Passes = () => {
                         </tr>) : (
                             passes.map((v) => (
                                 <tr key={v._id} className="hover:bg-gray-50">
-                                    <td className="px-2 py-3 "> {dayjs(v.validTo).format("DD-MM-YYYY")} </td>
+                                    <td className="px-2 whitespace-nowrap py-3 "> {dayjs(v.validTo).format("DD-MM-YYYY")} </td>
                                     <td className="px-2 py-3 "> {v.issuedBy.name} </td>
                                     <td className="px-2 py-3 "> {v.status} </td>
                                     <td className="px-2 py-3 "> {dayjs(v.validFrom).format("HH:mm")} </td>

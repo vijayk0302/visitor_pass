@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Appointmentfrom = () => {
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
     const [formdata, setFormdata] = useState({
         name: "",
         email: "",
@@ -23,31 +24,39 @@ const Appointmentfrom = () => {
             name: res.data.user.name,
             email: res.data.user.email,
         }))
-       
+
     }
 
     const handlesubmit = async (e) => {
-        e.preventDefault();
-        
-        const data = new FormData();
-        
-        data.append("name", formdata.name);
-        data.append("email", formdata.email);
-        data.append("phone", formdata.phone);
-        data.append("idproof", formdata.idproof);
-        data.append("visitDate", formdata.visitDate);
-        data.append("purpose", formdata.purpose);
+        try {
+            setLoading(true)
+            e.preventDefault();
+            const data = new FormData();
+            data.append("name", formdata.name);
+            data.append("email", formdata.email);
+            data.append("phone", formdata.phone);
+            data.append("idproof", formdata.idproof);
+            data.append("visitDate", formdata.visitDate);
+            data.append("purpose", formdata.purpose);
 
-        data.append("photo", photo);
+            data.append("photo", photo);
 
-        await api.post("/api/appointments/create", data, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
- 
-        alert('the appointment is booked')
-        navigate("/dashboard");
+            await api.post("/api/appointments/create", data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            alert('the appointment is booked')
+            navigate("/dashboard");
+
+        } catch (error) {
+            alert(error.message )
+
+        } finally {
+            setLoading(false)
+        }
+
     }
 
     useEffect(() => {
@@ -85,6 +94,7 @@ const Appointmentfrom = () => {
                             className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
                             type="tel"
                             placeholder="Phone"
+                            maxLength='10'
 
 
                         />
@@ -125,7 +135,7 @@ const Appointmentfrom = () => {
 
                         />
 
-                        <button className="bg-[#2d4fa3] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer" type="submit">Submit</button>
+                        <button disabled={loading} className="bg-[#2d4fa3] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer disabled:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">{loading ? "Please wait..." : "Submit"}</button>
                     </form>
                 </div>
             </div>

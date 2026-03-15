@@ -19,6 +19,7 @@ import ProtectedRoute from './context/ProtectedRoute'
 import Listvisitorpass from './pages/Listvisitorpass'
 import { Logs } from './pages/Logs'
 import ScanQR from './service/ScanQR'
+import Verify from './Auth/Verify'
 
 
 
@@ -35,6 +36,10 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
           </Route>
+
+      
+           <Route path='/verify' element={<Verify />}></Route>
+         
 
           <Route element={<Dashboardlayout />}>
 
@@ -63,7 +68,7 @@ function App() {
               <Route path="/appointment" element={<Appointment />} />
             </Route>
 
-            <Route element={<ProtectedRoute allowedRoles={['admin',"employee", 'security']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['admin', "employee", 'security']} />}>
               <Route path="/passes" element={<Passes />} />
             </Route>
 
@@ -79,7 +84,7 @@ function App() {
               <Route path="/my-pass/:id" element={<Listvisitorpass />} />
             </Route>
 
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'security','employee','visitor']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['admin', 'security', 'employee', 'visitor']} />}>
               <Route path="/passes/view/:id" element={<Singlepass />} />
             </Route>
 

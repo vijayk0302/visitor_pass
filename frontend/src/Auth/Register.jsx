@@ -2,9 +2,10 @@ import api from "../api/api.js";
 import { useState } from 'react';
 import newbg from '../assets/newbg.png'
 import login from '../assets/login.webp'
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Register = () => {
+    const navigate=useNavigate()
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
@@ -22,7 +23,7 @@ const Register = () => {
                 password,
                 role
             });
-            window.location.href = "/login";
+            navigate('/verify')
 
         } catch (err) {
             setError(err.response?.data?.msg || "sign up failed");
@@ -69,7 +70,7 @@ const Register = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <label className='text-[#F9FAFB]' htmlFor="roles">Select role : </label>
-                        <select onChange={(e) => setRole(e.target.value)} value={role} defaultValue='' name={role} className='text-[#F9FAFB] border-2 rounded' id="roles">
+                        <select onChange={(e) => setRole(e.target.value)} value={role}  name={role} className='text-[#F9FAFB] border-2 rounded' id="roles">
                             <option >
                                 -- Choose Role --
                             </option>

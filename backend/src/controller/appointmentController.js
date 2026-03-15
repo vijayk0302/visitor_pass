@@ -3,6 +3,8 @@ import { userModel } from "../models/userModel.js";
 import { uploadFile } from "../services/storage.service.js";
 import { passModel } from "../models/passModel.js";
 import * as Qr from "qrcode";
+import { approvalEmail } from "../middleware/EmailConfig/appointmentmail.js";
+import { passEmail } from "../middleware/EmailConfig/passMail.js";
 
 export const createappointment = async (req, res) => {
   try {
@@ -25,7 +27,7 @@ export const createappointment = async (req, res) => {
     }
 
     let photourl = null;
-    
+
     if (req.file && req.file.buffer) {
       const fileBase64 = req.file.buffer.toString("base64");
       const result = await uploadFile(fileBase64);
@@ -41,6 +43,14 @@ export const createappointment = async (req, res) => {
       purpose,
       status: "pending",
     });
+    await appointment.populate("visitor");
+
+    await approvalEmail(
+      appointment.visitor.email,
+      appointment.visitor.name,
+      appointment.purpose,
+    );
+
     res.status(201).json({
       msg: "Appointment created, awaiting approval",
       appointment,
@@ -54,7 +64,9 @@ export const createappointment = async (req, res) => {
 
 export const approveappointment = async (req, res) => {
   try {
-    const appointment = await appointmentModel.findById(req.params.id);
+    const appointment = await appointmentModel
+      .findById(req.params.id)
+      .populate("visitor", "name email");
 
     if (!appointment) {
       return res.status(404).json({
@@ -82,30 +94,31 @@ export const approveappointment = async (req, res) => {
       });
     }
 
-    const visitdate=new Date(appointment.visitDate)
-    const validFrom=new Date(visitdate.setHours(9,0,0,0))
-    const validTo=new Date(visitdate.setHours(16,0,0,0))
+    const visitdate = new Date(appointment.visitDate);
+    const validFrom = new Date(visitdate.setHours(9, 0, 0, 0));
+    const validTo = new Date(visitdate.setHours(16, 0, 0, 0));
 
-    const issuer= await userModel.findById(req.user.id).select("name")
+    const issuer = await userModel.findById(req.user.id).select("name");
     if (!issuer) throw new Error("Issuer not found");
 
     const pass = await passModel.create({
-      appointment,
+      appointment: appointment._id,
       qrCode,
-      validFrom ,
+      validFrom,
       validTo,
       status: "active",
-      issuedBy:{
+      issuedBy: {
         id: issuer._id,
-        name:issuer.name,
-      }
+        name: issuer.name,
+      },
     });
+
+    await passEmail(appointment.visitor.email, appointment.visitor.name);
 
     res.status(201).json({
       msg: "Appointment approved & Pass issued successfully",
       pass,
     });
-
   } catch (err) {
     return res.status(500).json({
       msg: err.message,

@@ -21,10 +21,17 @@ const userSchema=new mongoose.Schema({
       enum: ["admin", "security", "employee",'visitor'],
       default: "employee"
     },
+    isverified:{
+      type:Boolean,
+      default:false
+    },
     status: {
       type: String,
       enum: ["pending", "active"],
       default: "pending"
+    },
+    verificationcode:{
+      type:String
     }
 },{timestamps:true})
 
