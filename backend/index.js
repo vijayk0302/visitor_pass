@@ -4,7 +4,6 @@ dotenv.config();
 
 import dbconnect from "./src/config/db.js";
 
-
 const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
