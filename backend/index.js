@@ -4,7 +4,6 @@ dotenv.config();
 
 import dbconnect from "./src/config/db.js";
 
-dbconnect();
 
 const PORT = process.env.PORT || 3000;
 
