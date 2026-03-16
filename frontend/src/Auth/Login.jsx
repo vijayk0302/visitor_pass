@@ -1,8 +1,10 @@
 import { useState } from "react";
 import api from "../api/api.js";
 import newbg from '../assets/newbg.png'
+import { NavLink } from "react-router-dom";
 
 const Login = () => {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -51,6 +53,7 @@ const Login = () => {
           />
           {error && <p className="mt-2 mb-2 text-red-600">{error}</p>}
           <button className=" bg-[#F59E0B] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer" type="submit">Login</button>
+          <p className="my-5 text-center text-[#F9FAFB]">Don't have account ? <NavLink to={'/register'} className="hover:text-[#D97706] text-[#F59E0B]">Register</NavLink></p>
         </form>
       </div>
     </div>

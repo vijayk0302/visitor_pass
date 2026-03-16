@@ -4,7 +4,7 @@ import  {useAuth} from './Authcontext.jsx'
 export default function ProtectedRoute({ allowedRoles }) {
   const { user, loading } = useAuth();
  
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className='flex justify-center items-center'>Loading...</div>;
 
 
   if (!user?.isAuthenticated) {

@@ -1,108 +1,51 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import api from '../api/api'
 import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom'
-import { usePDF } from 'react-to-pdf'
-
 
 
 const Singlepass = () => {
-    const { toPDF, targetRef } = usePDF({ filename: 'visitor-pass.pdf' })
     const { id } = useParams()
-
     useEffect(() => {
-        fetchrole()
         fetch()
     }, [])
 
     const [dets, setdets] = useState({})
-    const [role, setRole] = useState([])
-
-    const fetchrole = async () => {
-        const res = await api.get('api/users/me')
-        setRole(res.data.user.role)
-        
-    }
-
+  
     const fetch = async () => {
         const pass = await api.get(`/api/passes/view/${id}`)
-        setdets(pass.data)      
+        setdets(pass.data)
+        console.log(pass.data);
+        
     }
-
 
 
     return (
         <div className='w-full'>
-            <div
-                ref={targetRef}
-                className="max-w-sm mx-auto m-25 rounded-xl shadow-lg  p-2"
-                style={{
-                    backgroundColor: "#ffffff",
-                    border: "1px solid #d1d5db",
-                    color: "#111827"
-                }}
-            >
-                <div className="text-center  border-b pb-2 mb-3">
-                    <h2
-                        className="text-xl font-bold"
-                        style={{ color: "#1d4ed8" }}
-                    >
-                        VISITOR PASS
-                    </h2>
-                    <div className='flex justify-center '>
-                        <img className=' rounded-full object-cover size-35' src={dets.details?.appointment?.photo} alt="" />
+            <div className='flex justify-center my-15 sm:my-8'>
+                <div style={{ backgroundColor: "#111827" }} className='relative rounded-sm shadow-2xl w-90 h-130 overflow-hidden '>
+                    <h1 style={{ color: "#ffffff" }} className='pl-10 pt-10 text-xl  '>Visi.co</h1>
+                    <div style={{ backgroundColor: "#F59E0B" }} className='z-1 absolute bottom-0 w-full h-1/2  '></div>
+                    <div style={{ backgroundColor: "#ffffff" }} className='z-1 absolute w-200 h-67 top-34 -right-76.5  transform -rotate-45 '></div>
+                    <div style={{ backgroundColor: "#F59E0B" }} className='z-1 size-40  -top-20 -right-20 transform -rotate-45 absolute '></div>
+                    <p className='absolute -rotate-90 font-black z-1 text-lg bottom-15 ' style={{ color: "#111827" }}>{dets.pass?.status}</p>
+                    <p className='absolute -rotate-90 p-1 font-bold z-1 text-lg bottom-15 ' style={{ color: "#111827" }}>Issuer : {dets.pass?.issuedBy?.name}</p>
 
-                    </div>
-                </div>
-                <div className='flex space-x-3'>
-                    <div className="flex justify-center mb-4">
+                    <div className='flex flex-col items-center justify-center'>
+                        <img className='z-10 rounded-full object-cover mt-0 size-40' src={dets.pass?.appointment?.photo} alt="cover photo" />
+                        <p className='z-10 mt-3 text-xl font-black' style={{ color: "#111827" }}>{dets.pass?.appointment?.visitor?.name}</p>
+                        <p className='z-10 mt-3 text-sm font-bold' style={{ color: "#111827" }}>VISITOR'S PASS</p>
+                        <p className='z-10 mt-3 text-sm font-bold' style={{ color: "#111827" }}>{dets.pass?.appointment?.purpose}</p>
+                        <p className='z-10 mt-3 text-sm font-bold' style={{ color: "#111827" }}>{dayjs(dets.pass?.validFrom).format("DD-MM-YYYY")}</p>
                         <img
                             src={dets.pass?.qrCode}
                             alt="QR Code"
-                            className="w-36 h-36"
-                        />
-                    </div>
-                    <div className="space-y-2 text-sm">
-                        <p>
-                            <span className="font-extrabold ">Name:</span>{" "}
-                            {dets.details?.appointment?.visitor?.name}
-
-                        </p>
-
-                        <p>
-                            <span className="font-extrabold ">Purpose:</span>{" "}
-                            {dets.details?.appointment?.purpose}
-                        </p>
-
-                        <p>
-                            <span className="font-extrabold ">Visit Date:</span>{" "}
-                            {dayjs(dets.pass?.validFrom).format("DD-MM-YYYY,  HH:mm")}
-                        </p>
-
-                        <p>
-                            <span className="font-extrabold ">Valid Till:</span>{" "}
-                            {dayjs(dets.pass?.validTo).format("DD-MM-YYYY, HH:mm")}
-                        </p>
-
-                        <p>
-                            <span className="font-extrabold ">Issued By:</span>{" "}
-                            {dets.details?.issuedBy?.name}
-                        </p>
+                            className="z-10 w-36 h-36" />
                     </div>
                 </div>
-
-                <div className="mt-1 text-center">
-                    <p style={{ color: "#6b7280" }}>This pass is {dets.pass?.status}</p>
-                </div>
             </div>
-            <div className='flex justify-center items-center mt-3'>
-
-
-                {role === 'visitor' ? <button onClick={toPDF} className="cursor-pointer text-center w-fit bg-blue-700 px-4 py-2 rounded-lg text-white text-lg">Download</button> : null}
-
-
-            </div>
-
+           
+            
 
         </div>
     )

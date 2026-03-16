@@ -1,25 +1,32 @@
+import React from 'react'
+import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import Login from '../src/Auth/Login'
-import ErrorPage from './pages/ErrorPage'
-import Register from '../src/Auth/Register'
-import MainLayout from './components/MainLayout'
-import Dashboardlayout from './Layout/Dashboardlayout'
-import Dashboard from './pages/Dashboard'
-import Profile from './pages/Profile'
-import Employee from './pages/Employee'
-import Admin from './pages/Admin'
-import Visitors from './pages/Visitors'
-import Editemployee from './pages/Editemployee'
-import Appointment from './pages/Appointment'
-import Appointmentfrom from './pages/Appointmentfrom'
-import { Passes } from './pages/Passes'
-import Singlepass from './pages/Singlepass'
-import ProtectedRoute from './context/ProtectedRoute'
-import Listvisitorpass from './pages/Listvisitorpass'
-import { Logs } from './pages/Logs'
-import ScanQR from './service/ScanQR'
-import Verify from './Auth/Verify'
+
+const HomePage = lazy(() => import('./pages/HomePage'))
+const ErrorPage = lazy(() => import('./pages/ErrorPage'))
+const Profile = lazy(() => import('./pages/Profile'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const Employee = lazy(() => import('./pages/Employee'))
+const Admin = lazy(() => import('./pages/Admin'))
+const Visitors = lazy(() => import('./pages/Visitors'))
+const Editemployee = lazy(() => import('./pages/Editemployee'))
+const Appointment = lazy(() => import('./pages/Appointment'))
+const Appointmentfrom = lazy(() => import('./pages/Appointmentfrom'))
+const Passes = lazy(() => import('./pages/Passes'))
+const Singlepass = lazy(() => import('./pages/Singlepass'))
+const Listvisitorpass = lazy(() => import('./pages/Listvisitorpass'))
+const Logs = lazy(() => import('./pages/Logs'))
+
+const MainLayout = lazy(() => import('./components/MainLayout'))
+const Dashboardlayout = lazy(() => import('./Layout/Dashboardlayout'))
+
+const Login = lazy(() => import('./Auth/Login'))
+const Register = lazy(() => import('./Auth/Register'))
+const Verify = lazy(() => import('./Auth/Verify'))
+
+const ProtectedRoute = lazy(() => import('./context/ProtectedRoute'))
+const ScanQR = lazy(() => import('./service/ScanQR'))
+
 
 
 
@@ -30,76 +37,76 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path='/' element={<HomePage />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-          </Route>
-
-      
-           <Route path='/verify' element={<Verify />}></Route>
-         
-
-          <Route element={<Dashboardlayout />}>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'employee', 'security', 'visitor']} />}>
-              <Route path="/dashboard" element={<Dashboard />} />
+        <Suspense fallback={<div className='flex justify-center items-center'>Loading...</div>}>
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route path='/' element={<HomePage />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
             </Route>
 
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'employee', 'security', 'visitor']} />} >
-              <Route path="/profile" element={<Profile />} />
+            <Route path='/verify' element={<Verify />}></Route>
+
+            <Route element={<Dashboardlayout />}>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'employee', 'security', 'visitor']} />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'employee', 'security', 'visitor']} />} >
+                <Route path="/profile" element={<Profile />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/employees" element={<Employee />} />
+              </Route>
+
+
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/admin" element={<Admin />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'employee']} />}>
+                <Route path="/visitors" element={<Visitors />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'employee']} />}>
+                <Route path="/appointment" element={<Appointment />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', "employee", 'security']} />}>
+                <Route path="/passes" element={<Passes />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'security']} />}>
+                <Route path="/log" element={<Logs />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'security']} />}>
+                <Route path="/scanner" element={<ScanQR />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['visitor']} />}>
+                <Route path="/my-pass/:id" element={<Listvisitorpass />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'security', 'employee', 'visitor']} />}>
+                <Route path="/passes/view/:id" element={<Singlepass />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['visitor']} />}>
+                <Route path="/appointmentform" element={<Appointmentfrom />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/employees/edit/:id" element={<Editemployee />} />
+              </Route>
             </Route>
 
-            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-              <Route path="/employees" element={<Employee />} />
-            </Route>
 
-
-            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-              <Route path="/admin" element={<Admin />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'employee']} />}>
-              <Route path="/visitors" element={<Visitors />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'employee']} />}>
-              <Route path="/appointment" element={<Appointment />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin', "employee", 'security']} />}>
-              <Route path="/passes" element={<Passes />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'security']} />}>
-              <Route path="/log" element={<Logs />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'security']} />}>
-              <Route path="/scanner" element={<ScanQR />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['visitor']} />}>
-              <Route path="/my-pass/:id" element={<Listvisitorpass />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin', 'security', 'employee', 'visitor']} />}>
-              <Route path="/passes/view/:id" element={<Singlepass />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['visitor']} />}>
-              <Route path="/appointmentform" element={<Appointmentfrom />} />
-            </Route>
-
-            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-              <Route path="/employees/edit/:id" element={<Editemployee />} />
-            </Route>
-          </Route>
-
-
-          <Route path='*' element={<ErrorPage />} />
-        </Routes>
+            <Route path='*' element={<ErrorPage />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
 
     </>

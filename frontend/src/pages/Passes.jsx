@@ -5,7 +5,7 @@ import { GrFormView } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs'
 
-export const Passes = () => {
+const Passes = () => {
     const navigate = useNavigate()
     const [passes, setPasses] = useState([])
 
@@ -16,6 +16,7 @@ export const Passes = () => {
     const fetchallpasses = async () => {
         const res = await api.get('/api/passes/all')
         setPasses(res.data.pass);
+        console.log(res.data.pass);
     }
     return (
         <div className='w-full'>
@@ -62,3 +63,5 @@ export const Passes = () => {
         </div>
     )
 }
+
+export default Passes

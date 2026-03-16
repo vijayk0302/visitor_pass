@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { GrFormView } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 
-export const Logs = () => {
+const Logs = () => {
     const navigate = useNavigate()
     const [log, setLog] = useState([])
 
@@ -63,3 +63,5 @@ export const Logs = () => {
         </div>
     )
 }
+
+export default Logs

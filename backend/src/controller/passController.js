@@ -5,7 +5,7 @@ export const getallpass = async (req, res) => {
   try {
     const { role } = req.user;
     let pass;
-    if (role === "admin" || role === "employee" ||role==='security') {
+    if (role === "admin" || role === "employee" || role === "security") {
       pass = await passModel.find();
     } else {
       return res.status(403).json({ msg: "Forbidden" });
@@ -19,41 +19,43 @@ export const getallpass = async (req, res) => {
 export const getpassbyid = async (req, res) => {
   try {
     const { id: userId, role } = req.user;
-
     const passId = req.params.id;
 
     let pass;
-    if (role === "admin" || role === "employee" || role==='visitor' || role==='security') {
-      pass = await passModel.findById(passId);
-    } else if (role === "visitor") {
-      pass = await passModel.findOne({
-        _id: passId,
-        "visitor.id": userId,
+
+
+    if (role === "visitor") {
+      pass = await passModel.findById(passId).populate({
+        path: "appointment",
+        match: { visitor: userId },
+        select: "photo purpose visitor",
+        populate: {
+          path: "visitor",
+          select: "name",
+        },
       });
+
+    
+    } else if (role === "admin" || role === "employee" || role === "security") {
+      pass = await passModel.findById(passId).populate({
+        path: "appointment",
+        select: "photo purpose visitor",
+        populate: {
+          path: "visitor",
+          select: "name",
+        },
+      });
+
     } else {
       return res.status(403).json({ msg: "Forbidden" });
     }
 
-    if (!pass) {
-      return res.status(404).json({ msg: "Pass not found" });
+    if (!pass || !pass.appointment) {
+      return res.status(403).json({ msg: "Pass Not found" });
     }
 
-    const details = await passModel.findById(req.params.id).populate({
-      path: "appointment",
-      select: "photo purpose",
-      populate: {
-        path: "visitor",
-        select: "name email",
-      },
-    });
+    res.status(200).json({ pass });
 
-    if (!pass) {
-      return res.status(404).json({ msg: "pass not found" });
-    }
-    res.status(200).json({
-      details,
-      pass,
-    });
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -61,19 +63,18 @@ export const getpassbyid = async (req, res) => {
 
 export const getownpass = async (req, res) => {
   try {
-    const visitorId =req.params.id
-   const appointments = await appointmentModel.find({
-      visitor: visitorId
+    const visitorId = req.params.id;
+    const appointments = await appointmentModel.find({
+      visitor: visitorId,
     });
     const passes = await passModel
       .find({
-        appointment: { $in: appointments.map(a => a._id) }
+        appointment: { $in: appointments.map((a) => a._id) },
       })
       .populate("appointment");
 
     res.json(passes);
-
   } catch (err) {
-     res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };

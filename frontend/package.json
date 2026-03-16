@@ -11,16 +11,16 @@
     "host": "vite --host"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.3.2",
     "@tailwindcss/vite": "^4.2.0",
     "axios": "^1.13.5",
     "dayjs": "^1.11.19",
+    "html2pdf.js": "^0.14.0",
     "html5-qrcode": "^2.3.8",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.13.0",
-    "react-to-pdf": "^3.2.1",
-    "react-toastify": "^11.0.5",
     "tailwindcss": "^4.2.0"
   },
   "devDependencies": {

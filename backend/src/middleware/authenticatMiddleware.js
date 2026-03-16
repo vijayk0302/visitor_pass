@@ -20,6 +20,7 @@ export const authenticate = async (req, res, next) => {
     }
 
     req.user = user;
+  
     next();
   } catch (err) {
     let message = "Invalid token";

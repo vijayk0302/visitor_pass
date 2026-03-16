@@ -88,11 +88,11 @@ export const passEmail = async (email,name) => {
     </div>
 
     <p class="message">
-      You can download your visitor pass by logging into our website.
+      You can view your visitor pass by logging into our website.Please bring the id card you mentioned while filling appointment form.
     </p>
 
     <a href="https://visitor-pass-ui.vercel.app/login" class="button">
-      Login to Download Pass
+      Login to View Pass
     </a>
 
     <div class="footer">
