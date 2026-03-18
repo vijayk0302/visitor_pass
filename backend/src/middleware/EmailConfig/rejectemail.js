@@ -1,7 +1,7 @@
 import { transporter } from "./emailConfig.js";
 
 
-export const reject = async (email,name,remark,visit) => {
+export const reject = async (email,name,remark) => {
 
   try {
     const reject_email_template = `<!DOCTYPE html>

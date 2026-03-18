@@ -1,8 +1,9 @@
 import React from 'react'
 import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Reject from './components/Reject';
 
+
+const Reject =lazy(()=>import('./components/Reject'))
 const HomePage = lazy(() => import('./pages/HomePage'))
 const ErrorPage = lazy(() => import('./pages/ErrorPage'))
 const Profile = lazy(() => import('./pages/Profile'))

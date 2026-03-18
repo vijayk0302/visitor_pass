@@ -27,9 +27,9 @@ const Reject = () => {
         }
     };
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center">
+        <div className="bg-opacity-40 w-full flex justify-center items-center">
 
-            <div className="bg-white p-6 rounded-lg w-80">
+            <div className="bg-white border p-6 rounded-lg w-80">
                 <h2 className="text-lg font-bold mb-3">Reject Appointment</h2>
 
                 <textarea

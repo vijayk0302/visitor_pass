@@ -5,7 +5,7 @@ import { changePassword } from '../service/Authservice';
 
 
 const ChangePassword = () => {
-    
+
 
     const [form, setForm] = useState({
         oldpassword: "",
@@ -31,23 +31,21 @@ const ChangePassword = () => {
 
         try {
             const res = await changePassword(
-                
+
                 {
                     oldpassword: form.oldpassword,
                     newpassword: form.newpassword
                 }, {
                 withCredentials: true
             }
-
             );
-
             setMessage(res.data.message);
             setForm({
                 oldpassword: "",
                 newpassword: "",
                 confirmpassword: ""
             });
-
+            alert('password changed')
         } catch (err) {
             setError(err.response?.data?.message);
         }

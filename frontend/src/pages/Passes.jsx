@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Logoutbtn from '../components/Logoutbtn'
 import api from '../api/api'
-import { MdDelete } from "react-icons/md";
 import { GrFormView } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs'

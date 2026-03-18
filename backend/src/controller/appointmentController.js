@@ -189,10 +189,7 @@ export const rejectappointment = async (req, res) => {
       appointment.visitor.email,
       appointment.visitor.name,
       appointment.remark,
-      appointment.visitDate,
     );
-
-    console.log(appointment, appointment.visitor.name, appointment.remark);
 
     res.status(200).json({
       message: "Appointment rejected with remark",
