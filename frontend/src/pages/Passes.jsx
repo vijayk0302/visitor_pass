@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Logoutbtn from '../components/Logoutbtn'
 import api from '../api/api'
+import { MdDelete } from "react-icons/md";
 import { GrFormView } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs'
@@ -16,12 +17,12 @@ const Passes = () => {
     const fetchallpasses = async () => {
         const res = await api.get('/api/passes/all')
         setPasses(res.data.pass);
-        console.log(res.data.pass);
     }
+    
     return (
         <div className='w-full'>
             <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-                <h1 className='sm:ml-0 ml-9 font-bold text-sm sm:text-xl'>Passes</h1>
+                <h1 className='md:ml-0 ml-9 font-bold text-sm sm:text-xl'>Passes</h1>
                 <Logoutbtn />
 
             </div>

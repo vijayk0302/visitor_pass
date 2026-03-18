@@ -85,7 +85,7 @@ export const sendverificationcode = async (email, verificationcode) => {
 </html>`;
 
     const info = await transporter.sendMail({
-      from: '"Visitor pass management system" <sarcasticavi03@gmail.com>',
+      from: `"Visitor pass management system" ${process.env.EMAIL_USER}`,
       to: email,
       subject: "Verify your Email",
       text: `Your verfication code is ,${verificationcode}`, // Plain-text version of the message

@@ -15,7 +15,6 @@ const Logs = () => {
 
     const fectchlog = async () => {
         const res = await api.get('/api/checklogs')
-        
         setLog(res.data.checklog)
 
     }
@@ -23,7 +22,7 @@ const Logs = () => {
     return (
         <div className='w-full'>
             <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-                <h1 className='sm:ml-0 ml-9 font-bold text-sm sm:text-xl'>Visitor's Logs</h1>
+                <h1 className='md:ml-0 ml-9 font-bold text-sm sm:text-xl'>Visitor's Logs</h1>
                 <Logoutbtn />
             </div>
             <div className='mt-3 mx-6'>

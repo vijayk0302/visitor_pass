@@ -26,7 +26,6 @@ export const scanvisitor = async (req, res) => {
       pass: pass._id,
     });
 
-
     if (!log && pass.status === "active") {
       const newLog = await checklogModel.create({
         pass: pass._id,
@@ -34,16 +33,29 @@ export const scanvisitor = async (req, res) => {
         checkOutTime: null,
       });
 
+      await pass.populate({
+        path: "appointment",
+        select: "visitDate",
+        populate: {
+          path: "visitor",
+          select: "name",
+        },
+      });
+
+      const username = pass.appointment.visitor.name;
+      const date = pass.appointment.visitDate;
+
       pass.status = "used";
       await pass.save();
 
       return res.json({
         msg: "Visitor checked in",
         log: newLog,
+        username,
+        date,
       });
     }
 
-    // CHECK-OUT
     if (log && pass.status === "used") {
       log.checkOutTime = new Date();
       await log.save();

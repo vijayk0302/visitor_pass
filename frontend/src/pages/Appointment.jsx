@@ -3,15 +3,20 @@ import Logoutbtn from '../components/Logoutbtn'
 import { useState, useEffect } from 'react'
 import api from '../api/api'
 import { FaUserEdit } from "react-icons/fa";
+import { GrEject } from "react-icons/gr";
+import { useNavigate } from 'react-router-dom';
+
 
 
 const Appointment = () => {
-  const statuscolor={
-    approved:'text-green-600 text-xl cursor-pointer',
-    pending:'text-yellow-600 text-xl cursor-pointer',
-    rejected:'text-red-600 text-xl cursor-pointer'
+  const navigate= useNavigate()
+  const statuscolor = {
+    approved: 'text-green-600 text-xl cursor-pointer',
+    pending: 'text-yellow-600 text-xl cursor-pointer',
+    rejected: 'text-red-600 text-xl cursor-pointer'
   }
   const [appointments, setAppointments] = useState([])
+
 
   useEffect(() => {
     fetctalluser()
@@ -21,7 +26,7 @@ const Appointment = () => {
     const res = await api.get('/api/appointments')
     setAppointments(res.data.appointments)
   }
-  const approveappointment=async(id)=>{
+  const approveappointment = async (id) => {
     await api.patch(`/api/appointments/update/${id}`)
     fetctalluser()
     alert('appointmet approved and pass created')
@@ -31,7 +36,7 @@ const Appointment = () => {
   return (
     <div className='w-full'>
       <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-        <h1 className='sm:ml-0 ml-9 font-bold text-sm sm:text-xl'>Appointments</h1>
+        <h1 className='md:ml-0 ml-9 font-bold text-sm sm:text-xl'>Appointments</h1>
         <Logoutbtn />
       </div>
       <div className='overflow-x-auto rounded-lg shadow-lg mt-6 '>
@@ -63,16 +68,20 @@ const Appointment = () => {
                   <td className="px-2 whitespace-nowrap py-3 "> {v.idproof} </td>
                   <td className="px-2 whitespace-nowrap py-3 "> {v.purpose} </td>
                   <td className="px-2 py-3 "> {v.status} </td>
-                  <td className="px-2 py-3 "> <div className='flex space-x-4'>
-                    <FaUserEdit  onClick={()=>approveappointment(v._id)} className={statuscolor[v.status]||'text-black '} />
-                    
-                  </div> </td>
+                  <td className="px-2 py-3 ">
+                    {
+                      v.status === 'pending' && (<div className='flex space-x-4'>
+                        <FaUserEdit onClick={() => approveappointment(v._id)} className={statuscolor[v.status] || 'text-black '} />
+                        <GrEject onClick={()=>navigate(`/appointments/${v._id}`)} className={statuscolor[v.status] || 'text-black '} />
+                      </div>)
+                    }  </td>
                 </tr>
               ))
             )}
           </tbody>
 
         </table>
+        
       </div>
     </div>
   )

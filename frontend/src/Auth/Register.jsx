@@ -37,7 +37,7 @@ const Register = () => {
         <div style={{ backgroundImage: `url(${newbg})` }} className="bg-cover bg-center bg-fixed">
             <div className='min-h-screen flex-col space-x-7 flex lg:flex-row justify-center items-center px-4 rounded py-3'>
                 <div>
-                    <img className="lg:size-150 rounded" src={login} alt="" />
+                    <img className="h-80 md:h-125 rounded" src={login} alt="" />
 
                 </div>
                 <div className='w-full md:w-100 px-5 py-4 rounded-lg bg-[#111827]'>

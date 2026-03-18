@@ -72,7 +72,7 @@ export const registerUser = async (req, res) => {
     return res.status(400).json({
       success: false,
       msg: "Internal Server Error",
-      error:err.message,
+      error: err.message,
     });
   }
 };
@@ -87,18 +87,18 @@ export const verify = async (req, res) => {
         msg: "Invaild or Expired code",
       });
     }
-    if(user.role==='visitor'){
-      user.status='active';
+    if (user.role === "visitor") {
+      user.status = "active";
     }
     user.isverified = true;
     user.verificationcode = undefined;
 
     await user.save();
 
-    if(user.role==='visitor'){
+    if (user.role === "visitor") {
       await welcome(user.email, user.name);
     }
-    if(user.role!=='visitor'){
+    if (user.role !== "visitor") {
       await welcomeEmployee(user.email, user.name);
     }
     res.status(200).json({
@@ -214,5 +214,36 @@ export const createuserbyAdmin = async (req, res) => {
     res.status(500).json({
       msg: err.message,
     });
+  }
+};
+
+export const changepassword = async (req, res) => {
+  try {
+    const userID = req.user.id;
+    const { oldpassword, newpassword } = req.body;
+
+    if (!oldpassword || !newpassword) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const user = await userModel.findById(userID);
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    const ismatch = await bcrypt.compare(oldpassword, user.password);
+
+    if (!ismatch) {
+      return res.status(400).json({ message: "Incorrect old password" });
+    }
+
+    const hash = await bcrypt.hash(newpassword, 10);
+    user.password = hash;
+    await user.save();
+
+    res.json({ message: "Password changed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" ,error:error.message});
   }
 };

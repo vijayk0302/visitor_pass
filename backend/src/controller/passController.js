@@ -23,7 +23,6 @@ export const getpassbyid = async (req, res) => {
 
     let pass;
 
-
     if (role === "visitor") {
       pass = await passModel.findById(passId).populate({
         path: "appointment",
@@ -34,8 +33,6 @@ export const getpassbyid = async (req, res) => {
           select: "name",
         },
       });
-
-    
     } else if (role === "admin" || role === "employee" || role === "security") {
       pass = await passModel.findById(passId).populate({
         path: "appointment",
@@ -45,7 +42,6 @@ export const getpassbyid = async (req, res) => {
           select: "name",
         },
       });
-
     } else {
       return res.status(403).json({ msg: "Forbidden" });
     }
@@ -55,7 +51,6 @@ export const getpassbyid = async (req, res) => {
     }
 
     res.status(200).json({ pass });
-
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -78,3 +73,5 @@ export const getownpass = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+

@@ -1,6 +1,7 @@
 import { approvalEmail } from "../middleware/EmailConfig/approvalEmail.js";
 import { userModel } from "../models/userModel.js";
 
+
 export const getalluser = async (req, res) => {
   const user = await userModel.find({
     role: { $ne: "visitor" },
@@ -48,7 +49,7 @@ export const updateuser = async (req, res) => {
         msg: "user not found",
       });
     }
-    
+
     if (user.status === "active") {
       await approvalEmail(user.email, user.name);
     }
@@ -61,6 +62,7 @@ export const updateuser = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
 export const deleteuser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -138,3 +140,5 @@ export const getMe = async (req, res) => {
     });
   }
 };
+
+

@@ -7,6 +7,7 @@ import { IoIosAnalytics } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 import api from "../api/api.js";
 import { useEffect, useState } from "react";
+import visi from '../assets/visi.png'
 
 
 
@@ -28,23 +29,25 @@ const Sidebarmenu = ({ setIsopen }) => {
   const fetchProfile = async () => {
     const res = await api.get(`/api/users/me`);
     setRole(res.data.user.role);
-
-
   };
 
   return (
     <>
+      <div className="flex justify-center">
+        <img className='size-15 rounded-4xl' src={visi} alt="logo" />
+      </div>
 
-
-      <h2 className="text-2xl sm:text-4xl text-center font-bold my-2">visi.co</h2>
+      {/* <h2 className="text-2xl sm:text-4xl text-center font-bold my-2">visi.co</h2> */}
       <nav className="flex flex-col space-y-4 gap-2 mt-7.5">
 
-        <div className="flex items-center space-x-3">
-          <FaLaptop className="text-xl shrink-0" />
-          <span >
-            <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/dashboard"> Dashboard</NavLink>
-          </span>
-        </div>
+        {(role === 'admin' || role === 'employee' || role === 'security') && (
+          <div className="flex items-center space-x-3">
+            <FaLaptop className="text-xl shrink-0" />
+            <span >
+              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/dashboard"> Dashboard</NavLink>
+            </span>
+          </div>
+        )}
 
         {role === 'admin' && (
           <div className="flex items-center space-x-3 ">

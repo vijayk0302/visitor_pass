@@ -1,13 +1,15 @@
+import dotenv from "dotenv";
+dotenv.config();
 import nodemailer from "nodemailer";
 
+
+
 export const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
+  host: process.env.EMAILHOST,
+  port: Number(process.env.EMAILPORT),
   secure: false,
   auth: {
-    user: "sarcasticavi03@gmail.com",
-    pass: "uvmq shhh ksql njmg",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
-
-

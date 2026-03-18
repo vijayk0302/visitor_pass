@@ -5,6 +5,7 @@ import { passModel } from "../models/passModel.js";
 import * as Qr from "qrcode";
 import { approvalEmail } from "../middleware/EmailConfig/appointmentmail.js";
 import { passEmail } from "../middleware/EmailConfig/passMail.js";
+import { reject } from "../middleware/EmailConfig/rejectemail.js";
 
 export const createappointment = async (req, res) => {
   try {
@@ -161,6 +162,46 @@ export const getappointmentbyid = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       msg: err.message,
+    });
+  }
+};
+
+export const rejectappointment = async (req, res) => {
+  try {
+    const { remark } = req.body;
+
+    if (!remark) {
+      return res.status(400).json({ message: "Remark is required" });
+    }
+
+    const appointment = await appointmentModel
+      .findByIdAndUpdate(
+        req.params.id,
+        {
+          status: "rejected",
+          remark: remark,
+        },
+        { returnDocument: "after" },
+      )
+      .populate("visitor");
+
+    reject(
+      appointment.visitor.email,
+      appointment.visitor.name,
+      appointment.remark,
+      appointment.visitDate,
+    );
+
+    console.log(appointment, appointment.visitor.name, appointment.remark);
+
+    res.status(200).json({
+      message: "Appointment rejected with remark",
+      appointment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+      message: "Server error",
     });
   }
 };

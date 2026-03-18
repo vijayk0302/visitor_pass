@@ -1,6 +1,6 @@
-import app from "./src/app.js";
 import dotenv from "dotenv";
 dotenv.config();
+import app from "./src/app.js";
 
 import dbconnect from "./src/config/db.js";
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Reject from './components/Reject';
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const ErrorPage = lazy(() => import('./pages/ErrorPage'))
@@ -49,7 +50,7 @@ function App() {
 
             <Route element={<Dashboardlayout />}>
 
-              <Route element={<ProtectedRoute allowedRoles={['admin', 'employee', 'security', 'visitor']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'employee', 'security']} />}>
                 <Route path="/dashboard" element={<Dashboard />} />
               </Route>
 
@@ -72,6 +73,10 @@ function App() {
 
               <Route element={<ProtectedRoute allowedRoles={['admin', 'employee']} />}>
                 <Route path="/appointment" element={<Appointment />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'employee']} />}>
+                <Route path="/appointments/:id" element={<Reject />} />
               </Route>
 
               <Route element={<ProtectedRoute allowedRoles={['admin', "employee", 'security']} />}>

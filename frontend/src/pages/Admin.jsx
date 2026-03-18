@@ -1,16 +1,10 @@
-import { useEffect, useState } from 'react'
-import { FaUser, FaUsers } from "react-icons/fa";
-import { GiArchiveRegister } from "react-icons/gi";
+import {  useState } from 'react'
 import Logoutbtn from '../components/Logoutbtn'
 import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
     const navigate = useNavigate();
-    const [visitors, setVisitors] = useState('')
-    const [employee, setEmployee] = useState('')
-    const [appoint, setAppoint] = useState('')
-    const [pending, setPending] = useState('')
     const [user, setUser] = useState({
         name: "",
         email: "",
@@ -18,25 +12,7 @@ const Admin = () => {
         role: ""
     })
 
-    useEffect(() => {
-        totalvisitors()
-    }, [])
-    const totalvisitors = async () => {
-        try {
-            const totalemploye = await api.get('/api/dashboard/employees')
-            const visitors = await api.get('/api/dashboard/visitors')
-            const count = await api.get('/api/dashboard/pending')
-            const appointments = await api.get('/api/dashboard/stats')
-
-            setAppoint(appointments.data.countap)
-            setPending(count.data.pending)
-            setVisitors(visitors.data.visitors)
-            setEmployee(totalemploye.data.totalemployess)
-
-        } catch (error) {
-
-        }
-    }
+    
     const handleform = async (e) => {
         e.preventDefault();
         const newuser = await api.post('/api/auth/create-user', user)
@@ -48,41 +24,10 @@ const Admin = () => {
     return (
         <div className='w-full'>
             <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-                <h1 className='sm:ml-0 ml-9 font-bold text-sm sm:text-xl'>Admin's Dashboard</h1>
+                <h1 className='md:ml-0 ml-9 font-bold text-sm sm:text-xl'>Admin's Dashboard</h1>
                 <Logoutbtn />
             </div>
-            <div className='flex w-full flex-wrap p-4 gap-2 justify-between mt-3 '>
-                <div className='flex justify-around p-7 sm:min-w-62.5 min-w-full rounded-lg bg-green-400'>
-                    <div>
-                        <FaUser className='inline md:text-xl sm:text-sm' />  Total employees
-                    </div>
-                    <div>{employee}</div>
-                </div>
-                <div className='flex justify-around p-7 sm:min-w-62.5 min-w-full rounded-lg bg-blue-500'>
-                    <div>
-                        <FaUsers className='inline text-2xl ' />  Total visitors
-                    </div>
-                    <div>
-                        {visitors}
-                    </div>
-                </div>
-                <div className='flex justify-around p-7 sm:min-w-62.5 min-w-full rounded-lg bg-yellow-500'>
-                    <div>
-                        <GiArchiveRegister className='inline text-2xl' />  Total pre register
-                    </div>
-                    <div>
-                        {appoint}
-                    </div>
-                </div>
-                <div className='flex justify-around p-7 sm:min-w-62.5 min-w-full rounded-lg bg-red-500'>
-                    <div>
-                        <GiArchiveRegister className='inline text-2xl' />  Pending users
-                    </div>
-                    <div>
-                        {pending}
-                    </div>
-                </div>
-            </div>
+            
             <div className='flex md:flex-row sm:p-0 p-3 bg-gray-100 justify-center mt-2 items-center'>
                 <div className='w-100 mt-10 text-center p-5 rounded-xl shadow-lg border'>
                     <h1 className='text-center font-bold text-2xl'>Create a new User </h1>
@@ -105,6 +50,10 @@ const Admin = () => {
                     </form>
                 </div>
 
+            </div>
+            <div className='flex justify-center mt-4 space-x-3'>
+            <button onClick={()=>navigate('/employees')} className="bg-[#2d4fa3] w-fit text-white px-4  py-3 rounded-sm cursor-pointer " >All Employees</button>
+            <button onClick={()=>navigate('/dashboard')} className="bg-[#2d4fa3] w-fit text-white px-4  py-3 rounded-sm cursor-pointer " >Go to Dashboard</button>
             </div>
         </div>
     )

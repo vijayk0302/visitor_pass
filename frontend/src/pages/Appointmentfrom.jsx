@@ -48,7 +48,7 @@ const Appointmentfrom = () => {
             });
 
             alert('the appointment is booked')
-            navigate("/dashboard");
+            navigate("/profile");
 
         } catch (error) {
             alert(error.message )
