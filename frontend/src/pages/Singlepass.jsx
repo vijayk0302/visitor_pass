@@ -15,7 +15,7 @@ const Singlepass = () => {
     const fetch = async () => {
         const pass = await api.get(`/api/passes/view/${id}`)
         setdets(pass.data)
-        console.log(pass.data);
+       
         
     }
 

@@ -105,7 +105,7 @@ export const approvalEmail = async (email,name) => {
     const info = await transporter.sendMail({
       from: `"Visitor pass management system" ${process.env.EMAIL_USER}`,
       to: email,
-      subject: "Welcome to Visi.co",
+      subject: "Account approved",
       html: approval_template, 
     });
     console.log("Email sent successfully");

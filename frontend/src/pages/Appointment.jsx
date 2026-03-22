@@ -4,6 +4,7 @@ import api from '../api/api'
 import { FaUserEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { MdDoNotDisturbAlt } from "react-icons/md";
+import { toast } from 'react-toastify';
 
 const Appointment = () => {
   const navigate = useNavigate();
@@ -22,8 +23,9 @@ const Appointment = () => {
     try {
       await api.patch(`/api/appointments/update/${id}`);
       fetctalluser();
+      toast.success('Appointment Approved')
     } catch (err) {
-      console.log(err);
+      toast.error(err);
     }
   };
 
@@ -123,8 +125,11 @@ const Appointment = () => {
                         </button>
 
                         <button
+                        disabled={v.status === 'approved'||v.status==='rejected' }
                           onClick={() => navigate(`/appointments/${v._id}`)}
-                          className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"
+                          className={`p-2 rounded-lg ${
+                            (v.status==='approved'|| v.status==='rejected')? 'bg-gray-500/10 text-gray-500 cursor-not-allowed':'bg-red-500/10 text-red-400 hover:bg-red-500/20 transition'
+                          } `}
                         >
                           <MdDoNotDisturbAlt />
                         </button>

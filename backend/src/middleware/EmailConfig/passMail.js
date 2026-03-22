@@ -107,7 +107,7 @@ export const passEmail = async (email,name) => {
     const info = await transporter.sendMail({
       from: `"Visitor pass management system" ${process.env.EMAIL_USER}`,
       to: email,
-      subject: "appointment submitted",
+      subject: "Pass created Successfully",
       html: pass_template, 
     });
     console.log("Email sent successfully");

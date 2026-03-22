@@ -2,6 +2,7 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import { useEffect } from "react";
 import api from "../api/api";
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 
 function ScanQR() {
@@ -28,10 +29,10 @@ function ScanQR() {
           }
         );
 
-        alert(res.data.msg);
+        toast.success(res.data.msg);
 
       } catch (err) {
-        alert(err.response?.data?.msg || "Error");
+        toast.error(err.response?.data?.msg || "Error");
       }
 
       navigate('/log')

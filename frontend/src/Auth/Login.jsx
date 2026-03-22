@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../api/api.js";
 import newbg from '../assets/newbg.png'
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
 
@@ -9,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,24 +29,25 @@ const Login = () => {
       else window.location.href = "/profile";
 
     } catch (err) {
-      setError(err.response?.data?.msg || "Login failed");
+      toast.error(err.response?.data?.msg || "Login failed");
     } finally {
       setLoading(false);
     }
   };
 
+
   return (
     <div
       className="flex items-center px-5 justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${newbg})` }}>
-     
+
 
       <div className="relative w-full max-w-md bg-[#111827] text-white p-8 rounded-2xl shadow-2xl border border-white/10">
         <h2 className="text-3xl font-bold text-center">Welcome Back</h2>
         <p className="text-gray-400 text-sm text-center mt-1">Login to your account</p>
 
         <form onSubmit={handleLogin} className="mt-6 space-y-5">
-          
+
           <div>
             <label className="text-sm text-gray-400">Email</label>
             <input
@@ -57,7 +60,7 @@ const Login = () => {
             />
           </div>
 
-       
+
           <div>
             <label className="text-sm text-gray-400">Password</label>
             <input
@@ -70,14 +73,14 @@ const Login = () => {
             />
           </div>
 
-          
-          {error && (
+
+          {/* {error && (
             <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg border border-red-500/20">
               {error}
             </p>
-          )}
+          )} */}
 
-          {/* Button */}
+
           <button
             type="submit"
             disabled={loading}
@@ -86,7 +89,7 @@ const Login = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-         
+
           <p className="text-center text-gray-400 text-sm">
             Don't have an account?{" "}
             <NavLink

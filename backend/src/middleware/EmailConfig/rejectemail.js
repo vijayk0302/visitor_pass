@@ -90,7 +90,7 @@ export const reject = async (email,name,remark) => {
     const info = await transporter.sendMail({
       from: `"Visitor pass management system" ${process.env.EMAIL_USER}`,
       to: email,
-      subject: "Welcome to Visi.co",
+      subject: "Appointment Rejected",
       html: reject_email_template, 
     });
     console.log("Email sent successfully");

@@ -77,7 +77,7 @@ export const sendverificationcode = async (email, verificationcode) => {
     </p>
 
     <div class="footer">
-      © ${new Date().getFullYear()} Visitor Pass Management System
+      © 2026 Visitor Pass Management System
     </div>
 
   </div>

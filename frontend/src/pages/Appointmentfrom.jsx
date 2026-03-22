@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Logoutbtn from '../components/Logoutbtn'
 import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Appointmentfrom = () => {
     const navigate = useNavigate();
@@ -44,10 +45,11 @@ const Appointmentfrom = () => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
+            toast.success('Appointment is booked')
             navigate("/profile");
 
         } catch (error) {
-            console.log(error);
+            toast.error(error);
         } finally {
             setLoading(false);
         }

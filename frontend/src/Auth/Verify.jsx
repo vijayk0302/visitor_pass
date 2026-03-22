@@ -1,47 +1,82 @@
-import React from 'react'
+import React, { useState } from 'react'
 import api from "../api/api.js";
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bgyellow from '../assets/bg-yellow.jpg'
 import email from '../assets/Mar-Business_18.jpg'
+import { toast } from 'react-toastify';
 
 const Verify = () => {
-    const navigate = useNavigate()
-    const [code, setCode] = useState('')
-    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate();
+
+    const [code, setCode] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const handlesubmit = async (e) => {
-        e.preventDefault()
-        try {
-            setLoading(true)
-            await api.post(`/api/auth/verify`, { code });
-            alert('your email has been verified')
-            navigate('/login')
+        e.preventDefault();
+        setError("");
+        setLoading(true);
 
+        try {
+            await api.post(`/api/auth/verify`, { code });
+            navigate('/login');
+            toast.success('verfication successful')
         } catch (error) {
-            alert(error?.response?.data?.message || "Verification failed")
-        }finally{
-            setLoading(false)
+            toast.error(error?.response?.data?.message || "Verification failed");
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     return (
-        <div style={{ backgroundImage: `url(${bgyellow})` }} className='min-h-screen  bg-cover bg-center flex justify-center items-center p-3'>
-            <div className='bg-white bg-opacity-30 backdrop-blur-lg p-10 rounded-lg shadow-xl max-w-md w-full text-center'>
-                <div className='flex justify-center'>
-                <img className='h-50' src={email} alt="" />
+        <div className="min-h-screen bg-[#111827] flex items-center justify-center px-4">
+
+            <div className="w-full max-w-md bg-[#1F2937] text-white p-8 rounded-2xl shadow-2xl border border-white/10">
+
+               
+                <div className="flex justify-center">
+                    <img className="h-40 object-contain" src={email} alt="verify" />
                 </div>
-                <h1 className='text-xl mt-3'>Verify your email address</h1>
-                <p className='text-sm text-gray-500 mt-3'>The verification code has been sent to your email address.Please check</p> 
-                <form onSubmit={handlesubmit} className='mt-4' >
-                    <input value={code} onChange={(e) => setCode(e.target.value)} className='px-3 py-2 w-full bg-gray-200 rounded-lg border outline-blue-400' type="text" maxLength="6" required placeholder='Verification code ...' />
-                    <div className='flex justify-center items-center'>
-                        <button disabled={loading} className='block text-white bg-[#f59f0bd8] px-3 py-2 rounded-[50px] cursor-pointer mt-5 disabled:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed'>{loading ? "Verifying..." : "Submit"}</button>
-                    </div>
+
+                
+                <h1 className="text-2xl font-bold mt-4 text-center">
+                    Verify Email
+                </h1>
+
+                <p className="text-gray-400 text-sm mt-2 text-center">
+                    Enter the 6-digit code sent to your email
+                </p>
+
+               
+                <form onSubmit={handlesubmit} className="mt-6 space-y-5">
+
+                    <input
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        maxLength="6"
+                        required
+                        placeholder="Enter verification code"
+                        className="w-full px-4 py-2 bg-[#111827] border border-white/10 rounded-lg text-center tracking-widest text-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                    />
+
+                  
+                    {error && (
+                        <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg border border-red-500/20">
+                            {error}
+                        </p>
+                    )}
+
+            
+                    <button
+                        disabled={loading}
+                        className="w-full bg-[#F59E0B] text-[#111827] py-2 rounded-lg font-semibold hover:bg-yellow-400 active:scale-95 transition disabled:opacity-60"
+                    >
+                        {loading ? "Verifying..." : "Verify Code"}
+                    </button>
+
                 </form>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Verify
+export default Verify;

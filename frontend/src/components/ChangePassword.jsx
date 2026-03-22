@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { changePassword } from '../service/Authservice';
+import { toast } from 'react-toastify';
 
 const ChangePassword = () => {
 
@@ -22,7 +23,7 @@ const ChangePassword = () => {
         setError("");
 
         if (form.newpassword !== form.confirmpassword) {
-            return setError("New passwords do not match");
+            return toast.error("New passwords do not match");
         }
 
         try {
@@ -34,7 +35,7 @@ const ChangePassword = () => {
                 { withCredentials: true }
             );
 
-            setMessage(res.data.message);
+            toast.success(res.data.message);
             setForm({
                 oldpassword: "",
                 newpassword: "",
@@ -42,7 +43,7 @@ const ChangePassword = () => {
             });
 
         } catch (err) {
-            setError(err.response?.data?.message || "Something went wrong");
+            toast.error(err.response?.data?.message || "Something went wrong");
         }
     };
 
@@ -101,17 +102,17 @@ const ChangePassword = () => {
                     </div>
 
                
-                    {message && (
+                    {/* {message && (
                         <p className="text-green-400 text-sm text-center bg-green-500/10 p-2 rounded-lg border border-green-500/20">
                             {message}
                         </p>
-                    )}
+                    )} */}
 
-                    {error && (
+                    {/* {error && (
                         <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg border border-red-500/20">
                             {error}
                         </p>
-                    )}
+                    )} */}
 
                    
                     <button

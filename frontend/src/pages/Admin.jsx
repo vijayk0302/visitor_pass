@@ -25,7 +25,7 @@ const Admin = () => {
             await api.post('/api/auth/create-user', user);
             navigate("/employees");
         } catch (err) {
-            setError(err.response?.data?.msg || "Failed to create user");
+            toast(err.response?.data?.msg || "Failed to create user");
         } finally {
             setLoading(false);
         }

@@ -51,7 +51,7 @@ export const welcome = async (email,name) => {
       margin-top: 20px;
       padding: 12px 22px;
       background-color: #2563eb;
-      color: white;
+      color: #ffffff;
       text-decoration: none;
       border-radius: 5px;
       font-size: 14px;
