@@ -1,99 +1,147 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Logoutbtn from '../components/Logoutbtn'
-import { useState, useEffect } from 'react'
 import api from '../api/api'
 import { FaUserEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { MdDoNotDisturbAlt } from "react-icons/md";
 
-
-
 const Appointment = () => {
-  const navigate = useNavigate()
-  
-  const [appointments, setAppointments] = useState([])
-
+  const navigate = useNavigate();
+  const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    fetctalluser()
-  }, [])
+    fetctalluser();
+  }, []);
 
   const fetctalluser = async () => {
-    const res = await api.get('/api/appointments')
-    setAppointments(res.data.appointments)
-    console.log(res.data.appointments)
-  }
-  const approveappointment = async (id) => {
-    await api.patch(`/api/appointments/update/${id}`)
-    fetctalluser()
-    alert('appointmet approved and pass created')
+    const res = await api.get('/api/appointments');
+    setAppointments(res.data.appointments);
+  };
 
-  }
+  const approveappointment = async (id) => {
+    try {
+      await api.patch(`/api/appointments/update/${id}`);
+      fetctalluser();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const statusColor = (status) => {
+    if (status === "approved") return "text-green-400 bg-green-500/10 border-green-500/20";
+    if (status === "pending") return "text-yellow-400 bg-yellow-500/10 border-yellow-500/20";
+    return "text-gray-400 bg-gray-500/10 border-gray-500/20";
+  };
 
   return (
-    <div className='w-full'>
-      <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-        <h1 className='md:ml-0 ml-9 font-bold text-sm sm:text-xl'>Appointments</h1>
+    <div className='min-h-screen w-full bg-[#111827] text-white'>
+
+  
+      <div className='flex justify-between items-center px-6 py-4 border-b border-white/10'>
+        <h1 className='md:ml-0 ml-9 text-xl font-bold'>Appointments</h1>
         <Logoutbtn />
       </div>
-      <div className='overflow-x-auto rounded-lg shadow-lg mt-6 '>
-        <table className='min-w-full  rounded-xl border border-gray-100'>
-          <thead className="bg-gray-300">
-            <tr >
-              <th className="px-2 py-3 border-b  text-left ">Name</th>
-              <th className="px-2 py-3 border-b  text-left ">Email</th>
-              <th className="px-2 py-3 border-b text-left ">photo</th>
-              <th className="px-2 py-3 border-b  text-left ">phone</th>
-              <th className="px-2 py-3 border-b  whitespace-nowrap text-left ">Id proof</th>
-              <th className="px-2 py-3 border-b whitespace-nowrap text-left ">Purpose</th>
-              <th className="px-2 py-3 border-b text-left ">Status</th>
-              <th className="px-2 py-3 border-b text-left ">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.length === 0 ? (<tr>
-              <td colSpan={8} className="text-center py-2">
-                No Appointment Found
-              </td>
-            </tr>) : (
-              appointments.map((v) => (
-                <tr key={v._id} className="hover:bg-gray-50">
-                  <td className="px-2 py-3 "> {v.visitor.name} </td>
-                  <td className="px-2 py-3 "> {v.visitor.email} </td>
-                  <td className="px-2 py-3 "> <img className='w-10 h-10 rounded-full' src={v.photo} alt="" />{v.role} </td>
-                  <td className="px-2 py-3 "> {v.phone} </td>
-                  <td className="px-2 whitespace-nowrap py-3 "> {v.idproof} </td>
-                  <td className="px-2 whitespace-nowrap py-3 "> {v.purpose} </td>
-                  <td className="px-2 py-3 "> {v.status} </td>
-                  <td className="px-2 py-3 ">
-                    <div className='flex space-x-4 items-center'>
-                    
-                      <FaUserEdit
-                        onClick={() => v.status === 'pending' && approveappointment(v._id)}
-                        className={`text-xl cursor-pointer ${v.status === 'pending'
-                            ? 'text-green-600 hover:scale-110'
-                            : 'text-gray-400 cursor-not-allowed'
-                          }`}
-                        title="Approve"
-                      />
 
-                      <MdDoNotDisturbAlt
-                        onClick={() => navigate(`/appointments/${v._id}`)}
-                        className="text-red-500 text-xl cursor-pointer hover:scale-110"
-                        title="View / Reject"
-                      />
-                    </div>
+     
+      <div className='p-6'>
+        <div className='bg-[#1F2937] rounded-2xl shadow-xl border border-white/10 overflow-x-auto'>
+
+          <table className='min-w-full'>
+
+           
+            <thead className="bg-white/5 text-gray-400 text-sm">
+              <tr>
+                <th className="px-6 py-4 text-center">User</th>
+                <th className="px-6 py-4 text-left">Phone</th>
+                <th className="px-6 py-4 text-left">ID Proof</th>
+                <th className="px-6 py-4 text-left">Purpose</th>
+                <th className="px-6 py-4 text-left">Status</th>
+                <th className="px-6 py-4 text-left">Action</th>
+              </tr>
+            </thead>
+
+          
+            <tbody>
+              {appointments.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-6 text-gray-400">
+                    No appointments found
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
+              ) : (
+                appointments.map((v) => (
+                  <tr
+                    key={v._id}
+                    className="border-t border-white/5 hover:bg-white/5 transition"
+                  >
 
-        </table>
+                 
+                    <td className="px-6 py-4 flex items-center gap-3">
+                      <img
+                        src={v.photo}
+                        alt=""
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <div>
+                        <p className="font-medium">{v.visitor.name}</p>
+                        <p className="text-gray-400 text-sm">
+                          {v.visitor.email}
+                        </p>
+                      </div>
+                    </td>
 
+                    
+                    <td className="px-6 py-4 text-gray-400">{v.phone}</td>
+
+                 
+                    <td className="px-6 py-4 text-gray-400">{v.idproof}</td>
+
+                
+                    <td className="px-6 py-4 text-gray-400">{v.purpose}</td>
+
+                
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1 text-xs rounded-full border ${statusColor(v.status)}`}>
+                        {v.status}
+                      </span>
+                    </td>
+
+                  
+                    <td className="px-6 py-4">
+                      <div className="flex gap-3">
+
+                        <button
+                          disabled={v.status !== 'pending'}
+                          onClick={() => approveappointment(v._id)}
+                          className={`p-2 rounded-lg transition ${
+                            v.status === 'pending'
+                              ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
+                              : 'bg-gray-500/10 text-gray-500 cursor-not-allowed'
+                          }`}
+                        >
+                          <FaUserEdit />
+                        </button>
+
+                        <button
+                          onClick={() => navigate(`/appointments/${v._id}`)}
+                          className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"
+                        >
+                          <MdDoNotDisturbAlt />
+                        </button>
+
+                      </div>
+                    </td>
+
+                  </tr>
+                ))
+              )}
+            </tbody>
+
+          </table>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Appointment
+export default Appointment;

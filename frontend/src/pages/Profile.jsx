@@ -5,43 +5,55 @@ import Logoutbtn from "../components/Logoutbtn";
 import Profilecard from "../components/Profilecard";
 import ChangePassword from "../components/ChangePassword";
 
-
-
 const Profile = () => {
-  
+
   const [user, setUser] = useState({
-          name: "",
-          email: "",
-          role: "",
-          status: ""
-      });
-  
+    name: "",
+    email: "",
+    role: "",
+    status: ""
+  });
+
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetchProfile();
   }, []);
 
   const fetchProfile = async () => {
-    const res = await api.get(`/api/users/me`);
-    setUser(res.data.user);
-
+    try {
+      const res = await api.get(`/api/users/me`);
+      setUser(res.data.user);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
-  if (!user.name) {
-    return <p className="p-6">Loading profile...</p>;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#111827] text-white flex items-center justify-center">
+        <p className="text-gray-400 animate-pulse">Loading profile...</p>
+      </div>
+    );
   }
 
   return (
-    <div className="w-full">
+    <div className="min-h-screen w-full bg-[#111827] text-white">
 
-      <div className="bg-gray-200 flex justify-between items-center shadow-lg p-4">
-        <h1 className="md:ml-0 ml-9 font-bold text-sm sm:text-xl">My Profile</h1>
+      <div className="flex justify-between items-center px-6 py-4 border-b border-white/10">
+        <h1 className="text-xl md:ml-0 ml-9 font-bold">My Profile</h1>
         <Logoutbtn />
       </div>
-      <Profilecard user={user}/>
-      <ChangePassword/>
 
-      
-      
+      <Profilecard user={user} />
+
+      <ChangePassword />
+
     </div>
+
+
   );
 };
 

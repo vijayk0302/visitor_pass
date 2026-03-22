@@ -5,91 +5,149 @@ import login from '../assets/login.webp'
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const navigate=useNavigate()
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handlerigster = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         setError("");
+        setLoading(true);
 
         try {
-            const res = await api.post(`/api/auth/register`, {
+            await api.post(`/api/auth/register`, {
                 name,
                 email,
                 password,
                 role
             });
-            navigate('/verify')
+
+            navigate('/verify');
 
         } catch (err) {
-            setError(err.response?.data?.msg || "sign up failed");
-
+            setError(err.response?.data?.msg || "Sign up failed");
+        } finally {
+            setLoading(false);
         }
-
-    }
-
+    };
 
     return (
-        <div style={{ backgroundImage: `url(${newbg})` }} className="bg-cover bg-center bg-fixed">
-            <div className='min-h-screen flex-col space-x-7 flex lg:flex-row justify-center items-center px-4 rounded py-3'>
-                <div>
-                    <img className="h-80 md:h-125 rounded" src={login} alt="" />
+        <div
+            className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
+            style={{ backgroundImage: `url(${newbg})` }}>
+            <div className="relative flex flex-col lg:flex-row items-center gap-8 px-4">
 
+          
+                <div className="hidden lg:block">
+                    <img
+                        className="h-150 rounded-2xl shadow-xl"
+                        src={login}
+                        alt="register"
+                    />
                 </div>
-                <div className='w-full md:w-100 px-5 py-4 rounded-lg bg-[#111827]'>
-                    <h1 className='text-center font-extrabold text-xl text-[#F9FAFB]'>Sign Up</h1>
-                    <form className='mt-6' onSubmit={handlerigster}>
-                        <span className="text-[#F9FAFB] text-sm mb-2 block">Name</span>
-                        <input
-                            type='text'
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            placeholder="Enter your Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
 
-                        <span className="text-[#F9FAFB] text-sm mb-2 block">Email</span>
-                        <input
-                            type='email'
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            placeholder="Enter your Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
+            
+                <div className="w-full max-w-md bg-[#111827] text-white p-8 rounded-2xl shadow-2xl border border-white/10">
 
-                        <span className="text-[#F9FAFB] text-sm mb-2 block">Password</span>
-                        <input
-                            type='password'
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            placeholder="Enter your password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <label className='text-[#F9FAFB]' htmlFor="roles">Select role : </label>
-                        <select onChange={(e) => setRole(e.target.value)} value={role}  name={role} className='text-[#F9FAFB] border-2 rounded' id="roles">
-                            <option >
-                                -- Choose Role --
-                            </option>
-                            <option className='text-black' value="admin">Admin</option>
-                            <option className='text-black' value="security">Secuirty</option>
-                            <option className='text-black' value="employee">Employee</option>
-                            <option className='text-black' value="visitor">Visitor</option>
-                        </select>
+                    <h1 className="text-3xl font-bold text-center">Create Account</h1>
+                    <p className="text-gray-400 text-sm text-center mt-1">
+                        Join the system to continue
+                    </p>
 
-                        {error && <p className="mt-2 mb-2 text-red-600">{error}</p>}
+                    <form className="mt-6 space-y-5" onSubmit={handlerigster}>
 
-                        <button className="bg-[#F59E0B] mx-auto mt-4 text-center block text-white px-4  py-1 rounded-[50px] cursor-pointer" type="submit">Sign up</button>
-                        <p className="my-5 text-center text-[#F9FAFB]">Already have account ? <NavLink to={'/login'} className="hover:text-[#D97706] text-[#F59E0B]">Login</NavLink></p>
+                     
+                        <div>
+                            <label className="text-sm text-gray-400">Name</label>
+                            <input
+                                type='text'
+                                placeholder="Enter your name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="text-sm text-gray-400">Email</label>
+                            <input
+                                type='email'
+                                placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="text-sm text-gray-400">Password</label>
+                            <input
+                                type='password'
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                                required
+                            />
+                        </div>
+                     
+                        <div>
+                            <label className="text-sm text-gray-400">Select Role</label>
+                            <select
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
+                                className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                                required
+                            >
+                                <option value="" disabled className="text-gray-400">
+                                    -- Choose Role --
+                                </option>
+                                <option value="admin">Admin</option>
+                                <option value="security">Security</option>
+                                <option value="employee">Employee</option>
+                                <option value="visitor">Visitor</option>
+                            </select>
+                        </div>
+
+                      
+                        {error && (
+                            <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg border border-red-500/20">
+                                {error}
+                            </p>
+                        )}
+
+                       
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-[#F59E0B] text-[#111827] py-2 rounded-lg font-semibold shadow-md hover:bg-yellow-400 active:scale-95 transition disabled:opacity-60"
+                        >
+                            {loading ? "Creating..." : "Sign Up"}
+                        </button>
+
+                   
+                        <p className="text-center text-gray-400 text-sm">
+                            Already have an account?{" "}
+                            <NavLink
+                                to="/login"
+                                className="text-[#F59E0B] hover:text-yellow-400 font-medium"
+                            >
+                                Login
+                            </NavLink>
+                        </p>
 
                     </form>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Register
+export default Register;

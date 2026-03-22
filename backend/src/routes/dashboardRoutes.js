@@ -8,10 +8,10 @@ import { authorize } from '../middleware/authorizeMiddleware.js'
 
 const dashboardRoutes=express.Router()
 
-dashboardRoutes.get('/employees',authenticate,authorize('admin') ,totalemployess)
-dashboardRoutes.get('/pending',authenticate,authorize('admin') ,countpending)
-dashboardRoutes.get('/visitors',authenticate,authorize('admin') ,countvisitors)
-dashboardRoutes.get('/stats',authenticate,authorize('admin'),appointmentstats)
+dashboardRoutes.get('/employees',authenticate,authorize('admin','employee','security') ,totalemployess)
+dashboardRoutes.get('/pending',authenticate,authorize('admin','employee','security') ,countpending)
+dashboardRoutes.get('/visitors',authenticate,authorize('admin','employee','security') ,countvisitors)
+dashboardRoutes.get('/stats',authenticate,authorize('admin','employee','security'),appointmentstats)
 
 
 export default dashboardRoutes

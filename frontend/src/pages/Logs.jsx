@@ -6,61 +6,119 @@ import { GrFormView } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 
 const Logs = () => {
-    const navigate = useNavigate()
-    const [log, setLog] = useState([])
+    const navigate = useNavigate();
+    const [log, setLog] = useState([]);
 
     useEffect(() => {
-        fectchlog()
-    }, [])
+        fectchlog();
+    }, []);
 
     const fectchlog = async () => {
-        const res = await api.get('/api/checklogs')
-        setLog(res.data.checklog)
+        const res = await api.get('/api/checklogs');
+        setLog(res.data.checklog);
+    };
 
-    }
+    const statusBadge = (checkout) => {
+        return checkout === null
+            ? "text-green-400 bg-green-500/10 border-green-500/20"
+            : "text-gray-400 bg-gray-500/10 border-gray-500/20";
+    };
 
     return (
-        <div className='w-full'>
-            <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-                <h1 className='md:ml-0 ml-9 font-bold text-sm sm:text-xl'>Visitor's Logs</h1>
+        <div className='min-h-screen w-full bg-[#111827] text-white'>
+
+           
+            <div className='flex justify-between items-center px-6 py-4 border-b border-white/10'>
+                <h1 className='text-xl md:ml-0 ml-9 font-bold'>Visitor Logs</h1>
                 <Logoutbtn />
             </div>
-            <div className='mt-3 mx-6'>
-                <button onClick={()=>navigate('/scanner')} className="px-4 py-2 rounded-lg text-white text-lg bg-blue-700 hover:bg-blue-800 transition ">Scan</button>
+
+           
+            <div className='px-6 mt-4'>
+                <button
+                    onClick={() => navigate('/scanner')}
+                    className="bg-[#F59E0B] text-[#111827] px-4 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition"
+                >
+                    Scan Visitor
+                </button>
             </div>
+
             
-            <div className='overflow-x-auto rounded-lg shadow-lg mt-3 '>
-                <table className='min-w-full rounded-xl border border-gray-100'>
-                    <thead className="bg-gray-300">
-                        <tr>
-                            <th className="px-2 py-3 border-b  text-left ">check-in</th>
-                            <th className="px-2 py-3 border-b  text-left ">check-out</th>
-                            <th className="px-2 py-3 border-b  text-left ">check-in By</th>
-                            <th className="px-2 py-3 border-b  text-left ">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {log.length === 0 ? (<tr>
-                            <td colSpan={8} className="text-center py-2">
-                                No Data to Show
-                            </td>
-                        </tr>) : (
-                            log.map((v) => (
-                                <tr key={v._id} className="hover:bg-gray-50">
-                                    <td className="px-2 py-3 ">{dayjs(v.checkInTime).format("HH:mm")}</td>
-                                    <td className="px-2 py-3 ">{v.checkOutTime===null ?"visitor is inside ":dayjs(v.checkOutTime).format("HH:mm")}</td>
-                                    <td className="px-2 py-3 ">{v.checkedInBy?.name}</td>
-                                    <td className="px-2 py-3 "> <div className='flex space-x-4'>
-                                        <GrFormView onClick={() => { navigate(`/passes/view/${v.pass}`) }} className='text-blue-600 text-2xl cursor-pointer' />
-                                    </div> </td>
+            <div className='p-6'>
+                <div className='bg-[#1F2937] rounded-2xl shadow-xl border border-white/10 overflow-x-auto'>
+
+                    <table className='min-w-full'>
+
+                     
+                        <thead className="bg-white/5 text-gray-400 text-sm">
+                            <tr>
+                                <th className="px-6 py-4 text-left">Check In</th>
+                                <th className="px-6 py-4 text-left">Check Out</th>
+                                <th className="px-6 py-4 text-left">Checked By</th>
+                                <th className="px-6 py-4 text-left">Status</th>
+                                <th className="px-6 py-4 text-left">Action</th>
+                            </tr>
+                        </thead>
+
+                       
+                        <tbody>
+                            {log.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="text-center py-6 text-gray-400">
+                                        No logs available
+                                    </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : (
+                                log.map((v) => (
+                                    <tr
+                                        key={v._id}
+                                        className="border-t border-white/5 hover:bg-white/5 transition"
+                                    >
+
+                                        
+                                        <td className="px-6 py-4 font-medium">
+                                            {dayjs(v.checkInTime).format("HH:mm")}
+                                        </td>
+
+                                     
+                                        <td className="px-6 py-4 text-gray-400">
+                                            {v.checkOutTime
+                                                ? dayjs(v.checkOutTime).format("HH:mm")
+                                                : "--"}
+                                        </td>
+
+                                     
+                                        <td className="px-6 py-4 whitespace-nowrap text-gray-400">
+                                            {v.checkedInBy?.name || "System"}
+                                        </td>
+
+                                      
+                                        <td className="px-6 py-4">
+                                            <span className={`px-3 py-1 text-xs whitespace-nowrap rounded-full border ${statusBadge(v.checkOutTime)}`}>
+                                                {v.checkOutTime ? "Checked Out" : "Inside"}
+                                            </span>
+                                        </td>
+
+                                      
+                                        <td className="px-6 py-4">
+                                            <button
+                                                onClick={() => navigate(`/passes/view/${v.pass}`)}
+                                                className="p-2 rounded-lg bg-[#F59E0B]/10 text-[#F59E0B] hover:bg-[#F59E0B]/20 transition"
+                                            >
+                                                <GrFormView />
+                                            </button>
+                                        </td>
+
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+
+                    </table>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Logs
+export default Logs;

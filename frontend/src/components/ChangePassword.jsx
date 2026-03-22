@@ -1,11 +1,7 @@
-import React from 'react'
-
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { changePassword } from '../service/Authservice';
 
-
 const ChangePassword = () => {
-
 
     const [form, setForm] = useState({
         oldpassword: "",
@@ -19,11 +15,11 @@ const ChangePassword = () => {
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
         setError("");
-
 
         if (form.newpassword !== form.confirmpassword) {
             return setError("New passwords do not match");
@@ -31,72 +27,103 @@ const ChangePassword = () => {
 
         try {
             const res = await changePassword(
-
                 {
                     oldpassword: form.oldpassword,
                     newpassword: form.newpassword
-                }, {
-                withCredentials: true
-            }
+                },
+                { withCredentials: true }
             );
+
             setMessage(res.data.message);
             setForm({
                 oldpassword: "",
                 newpassword: "",
                 confirmpassword: ""
             });
-            alert('password changed')
+
         } catch (err) {
-            setError(err.response?.data?.message);
+            setError(err.response?.data?.message || "Something went wrong");
         }
     };
+
     return (
-        <>
-            <div className="max-w-80 mx-auto mt-10 bg-white shadow-lg rounded-lg p-6">
-                <div className="flex flex-col items-center space-y-4">
-                    <h2 className="font-bold text-lg">Change Password</h2>
-                    <form onSubmit={handleSubmit} className="space-y-6 mt-6 " >
-                        <input className="rounded-lg block border-2 border-[#F59E0B] py-2  outline-blue-400"
+        <div className="mt-16">
+            <div className="w-full max-w-md mx-auto bg-[#111827] text-white shadow-2xl rounded-2xl p-8">
+                <h2 className="text-2xl font-bold text-center">
+                    Change Password
+                </h2>
+                <p className="text-center text-gray-400 text-sm mt-1">
+                    Update your credentials securely
+                </p>
+
+                <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+
+                   
+                    <div>
+                        <label className="text-sm text-gray-400">Old Password</label>
+                        <input
                             type="password"
                             name="oldpassword"
-                            placeholder="Old Password"
                             value={form.oldpassword}
                             onChange={handleChange}
+                            placeholder="Enter old password"
+                            className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                             required
                         />
+                    </div>
 
+                   
+                    <div>
+                        <label className="text-sm text-gray-400">New Password</label>
                         <input
-                            className="rounded-lg block border-2 border-[#F59E0B] py-2 outline-blue-400"
                             type="password"
                             name="newpassword"
-                            placeholder="New Password"
                             value={form.newpassword}
                             onChange={handleChange}
+                            placeholder="Enter new password"
+                            className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                             required
                         />
+                    </div>
 
+                    
+                    <div>
+                        <label className="text-sm text-gray-400">Confirm Password</label>
                         <input
-                            className="rounded-lg block border-2 border-[#F59E0B] py-2 outline-blue-400"
                             type="password"
                             name="confirmpassword"
-                            placeholder="Confirm New Password"
                             value={form.confirmpassword}
                             onChange={handleChange}
+                            placeholder="Confirm new password"
+                            className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                             required
                         />
-                        {message && <p className="success">{message}</p>}
-                        {error && <p className="error">{error}</p>}
+                    </div>
 
-                        <div className="flex justify-center">
-                            <button className="bg-[#1e88e5] p-2.5 rounded-lg" type="submit">Change Password</button>
+               
+                    {message && (
+                        <p className="text-green-400 text-sm text-center bg-green-500/10 p-2 rounded-lg border border-green-500/20">
+                            {message}
+                        </p>
+                    )}
 
-                        </div>
+                    {error && (
+                        <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg border border-red-500/20">
+                            {error}
+                        </p>
+                    )}
 
-                    </form>
-                </div>
+                   
+                    <button
+                        type="submit"
+                        className="w-full bg-[#F59E0B] text-[#111827] py-2 rounded-lg font-semibold shadow-md hover:bg-yellow-400 active:scale-95 transition"
+                    >
+                        Update Password
+                    </button>
+                </form>
             </div>
-        </>
-    )
-}
+        </div>
+    );
+};
 
-export default ChangePassword
+export default ChangePassword;

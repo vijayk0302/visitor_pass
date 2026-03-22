@@ -4,60 +4,101 @@ import newbg from '../assets/newbg.png'
 import { NavLink } from "react-router-dom";
 
 const Login = () => {
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
-
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await api.post(`/api/auth/login`, {
         email,
         password,
       });
+
       const role = res.data.user.role;
 
       if (role === "admin") window.location.href = "/admin";
-      else if (role === "employee") window.location.href = "/profile";
-      else if (role === "security") window.location.href = "/profile";
-      else if (role === "visitor") window.location.href = "/profile";
+      else window.location.href = "/profile";
 
     } catch (err) {
       setError(err.response?.data?.msg || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${newbg})` }} >
-      <div className="w-fit h-fit md:w-100 bg-[#111827] p-5 flex flex-col shadow-lg  rounded-lg">
-        <h2 className=" text-[#F9FAFB] font-extrabold mb-3 lg:text-2xl text-xl text-center ">Login</h2>
-        <form onSubmit={handleLogin}>
-          <span className="text-[#F9FAFB] text-sm mb-2 block">Email</span>
-          <input
-            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <span className="text-[#F9FAFB] text-sm mb-2 block">Password</span>
-          <input
-            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {error && <p className="mt-2 mb-2 text-red-600">{error}</p>}
-          <button className=" bg-[#F59E0B] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer" type="submit">Login</button>
-          <p className="my-5 text-center text-[#F9FAFB]">Don't have account ? <NavLink to={'/register'} className="hover:text-[#D97706] text-[#F59E0B]">Register</NavLink></p>
+    <div
+      className="flex items-center px-5 justify-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${newbg})` }}>
+     
+
+      <div className="relative w-full max-w-md bg-[#111827] text-white p-8 rounded-2xl shadow-2xl border border-white/10">
+        <h2 className="text-3xl font-bold text-center">Welcome Back</h2>
+        <p className="text-gray-400 text-sm text-center mt-1">Login to your account</p>
+
+        <form onSubmit={handleLogin} className="mt-6 space-y-5">
+          
+          <div>
+            <label className="text-sm text-gray-400">Email</label>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+              required
+            />
+          </div>
+
+       
+          <div>
+            <label className="text-sm text-gray-400">Password</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+              required
+            />
+          </div>
+
+          
+          {error && (
+            <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg border border-red-500/20">
+              {error}
+            </p>
+          )}
+
+          {/* Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#F59E0B] text-[#111827] py-2 rounded-lg font-semibold shadow-md hover:bg-yellow-400 active:scale-95 transition disabled:opacity-60"
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+
+         
+          <p className="text-center text-gray-400 text-sm">
+            Don't have an account?{" "}
+            <NavLink
+              to="/register"
+              className="text-[#F59E0B] hover:text-yellow-400 font-medium"
+            >
+              Register
+            </NavLink>
+          </p>
         </form>
       </div>
     </div>
-
   );
 };
 

@@ -4,8 +4,10 @@ import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
 const Appointmentfrom = () => {
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
+
     const [formdata, setFormdata] = useState({
         name: "",
         email: "",
@@ -13,134 +15,165 @@ const Appointmentfrom = () => {
         idproof: "",
         visitDate: "",
         purpose: ""
-    })
+    });
 
     const [photo, setPhoto] = useState(null);
 
     const fetchuser = async () => {
-        const res = await api.get('/api/users/me')
+        const res = await api.get('/api/users/me');
         setFormdata((prev) => ({
             ...prev,
             name: res.data.user.name,
             email: res.data.user.email,
-        }))
-
-    }
+        }));
+    };
 
     const handlesubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
         try {
-            setLoading(true)
-            e.preventDefault();
             const data = new FormData();
-            data.append("name", formdata.name);
-            data.append("email", formdata.email);
-            data.append("phone", formdata.phone);
-            data.append("idproof", formdata.idproof);
-            data.append("visitDate", formdata.visitDate);
-            data.append("purpose", formdata.purpose);
+            Object.keys(formdata).forEach((key) => {
+                data.append(key, formdata[key]);
+            });
 
             data.append("photo", photo);
 
             await api.post("/api/appointments/create", data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                headers: { "Content-Type": "multipart/form-data" },
             });
 
-            alert('the appointment is booked')
             navigate("/profile");
 
         } catch (error) {
-            alert(error.message )
-
+            console.log(error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-
-    }
+    };
 
     useEffect(() => {
-        fetchuser()
-    }, [])
+        fetchuser();
+    }, []);
+
     return (
-        <div className='w-full'>
-            <div className='bg-gray-200 flex justify-between items-center shadow-lg p-4'>
-                <h1 className='sm:ml-0 ml-9 font-bold text-sm sm:text-xl'>Appiontment</h1>
+        <div className='min-h-screen w-full bg-[#111827] text-white'>
+
+          
+            <div className='flex justify-between items-center px-6 py-4 border-b border-white/10'>
+                <h1 className='text-xl md:ml-0 ml-9 font-bold'>Book Appointment</h1>
                 <Logoutbtn />
             </div>
-            <div className="flex mt-6 items-center justify-center">
-                <div className="w-fit h-fit md:w-100 p-10  shadow-lg  rounded-lg">
-                    <h2 className="text-center font-bold mb-6 lg:text-2xl text-xl flex-col items-center ">Appointment Details</h2>
-                    <form method='post' encType="multipart/form-data" onSubmit={handlesubmit}>
-                        <span className="text-sm mb-2 block">Name</span>
-                        <input
-                            value={formdata.name} disabled
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            placeholder="Name"
 
-                        />
-                        <span className=" text-sm mb-2 block">Email</span>
-                        <input
-                            value={formdata.email} disabled
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            type="Email"
-                            placeholder="Email"
+           
+            <div className="flex justify-center px-4 py-10">
+                <div className="w-full max-w-md bg-[#1F2937] p-8 rounded-2xl shadow-2xl border border-white/10">
 
-                        />
-                        <span className=" text-sm mb-2 block">Phone</span>
-                        <input
-                            value={formdata.phone}
-                            onChange={(e) => setFormdata({ ...formdata, phone: e.target.value })}
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            type="tel"
-                            placeholder="Phone"
-                            maxLength='10'
+                    <h2 className="text-2xl font-bold text-center">
+                        Appointment Details
+                    </h2>
+                    <p className="text-gray-400 text-sm text-center mt-1">
+                        Fill in your visit information
+                    </p>
 
+                    <form onSubmit={handlesubmit} className="mt-6 space-y-5">
 
-                        />
-                        <span className=" text-sm mb-2 block">Photo</span>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => setPhoto(e.target.files[0])}
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            placeholder="Photo"
+                        {/* Name */}
+                        <div>
+                            <label className="text-sm text-gray-400">Name</label>
+                            <input
+                                value={formdata.name}
+                                disabled
+                                className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg text-gray-400"
+                            />
+                        </div>
 
-                        />
-                        <span className=" text-sm mb-2 block">ID Proof</span>
-                        <input
-                            value={formdata.idproof}
-                            onChange={(e) => setFormdata({ ...formdata, idproof: e.target.value })}
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            type="text"
-                            placeholder="Submit Document"
+                        {/* Email */}
+                        <div>
+                            <label className="text-sm text-gray-400">Email</label>
+                            <input
+                                value={formdata.email}
+                                disabled
+                                className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg text-gray-400"
+                            />
+                        </div>
 
-                        />
-                        <span className=" text-sm mb-2 block">Date of visit</span>
-                        <input
-                            value={formdata.visitDate}
-                            onChange={(e) => setFormdata({ ...formdata, visitDate: e.target.value })}
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            type="date"
-                            placeholder="Date ...."
+                        {/* Phone */}
+                        <div>
+                            <label className="text-sm text-gray-400">Phone</label>
+                            <input
+                                value={formdata.phone}
+                                onChange={(e) => setFormdata({ ...formdata, phone: e.target.value })}
+                                className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                                type="tel"
+                                maxLength="10"
+                                placeholder="Enter phone number"
+                                required
+                            />
+                        </div>
 
-                        />
-                        <span className=" text-sm mb-2 block">Purpose</span>
-                        <input
-                            value={formdata.purpose}
-                            onChange={(e) => setFormdata({ ...formdata, purpose: e.target.value })}
-                            className="px-3 w-full py-2 mb-6 block bg-gray-200 rounded-lg border outline-blue-400"
-                            type="text"
-                            placeholder="Purpose for visit"
+                        {/* Photo */}
+                        <div>
+                            <label className="text-sm text-gray-400">Photo</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setPhoto(e.target.files[0])}
+                                className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg file:bg-[#F59E0B] file:text-[#111827] file:border-0 file:px-3 file:py-1 file:rounded file:cursor-pointer"
+                                required
+                            />
+                        </div>
 
-                        />
+                        {/* ID Proof */}
+                        <div>
+                            <label className="text-sm text-gray-400">ID Proof</label>
+                            <input
+                                value={formdata.idproof}
+                                onChange={(e) => setFormdata({ ...formdata, idproof: e.target.value })}
+                                className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                                placeholder="Enter ID proof"
+                                required
+                            />
+                        </div>
 
-                        <button disabled={loading} className="bg-[#2d4fa3] w-full text-white px-3  py-2 rounded-[50px] cursor-pointer disabled:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">{loading ? "Please wait..." : "Submit"}</button>
+                        {/* Date */}
+                        <div>
+                            <label className="text-sm text-gray-400">Visit Date</label>
+                            <input
+                                value={formdata.visitDate}
+                                onChange={(e) => setFormdata({ ...formdata, visitDate: e.target.value })}
+                                className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                                type="date"
+                                required
+                            />
+                        </div>
+
+                        {/* Purpose */}
+                        <div>
+                            <label className="text-sm text-gray-400">Purpose</label>
+                            <input
+                                value={formdata.purpose}
+                                onChange={(e) => setFormdata({ ...formdata, purpose: e.target.value })}
+                                className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
+                                placeholder="Purpose of visit"
+                                required
+                            />
+                        </div>
+
+                        {/* Button */}
+                        <button
+                            disabled={loading}
+                            className="w-full bg-[#F59E0B] text-[#111827] py-2 rounded-lg font-semibold hover:bg-yellow-400 active:scale-95 transition disabled:opacity-60"
+                        >
+                            {loading ? "Booking..." : "Book Appointment"}
+                        </button>
+
                     </form>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Appointmentfrom
+export default Appointmentfrom;

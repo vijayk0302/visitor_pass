@@ -41,7 +41,7 @@ function ScanQR() {
   }, [])
 
 
-  return <div className="w-full mt-20 sm:mt-0" id="reader"></div>;
+  return <div className="w-full text-white bg-[#111827] mt-20 sm:mt-0" id="reader"></div>;
 }
 
 export default ScanQR;
