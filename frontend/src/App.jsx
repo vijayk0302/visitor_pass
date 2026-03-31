@@ -1,7 +1,7 @@
 import React from 'react'
 import { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route,Outlet } from 'react-router-dom'
-import Publicroutes from './context/Publicroutes';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 
 
 const Reject =lazy(()=>import('./components/Reject'))
@@ -52,11 +52,9 @@ function App() {
         <Suspense fallback={<Skeleton/>}>
           <Routes>
             <Route element={<MainLayout />}>
-            <Route element={<Publicroutes/>}>
               <Route path='/' element={<HomePage />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
-            </Route>
               <Route path='/register/admin' element={<Adminregister />} />
             </Route>
 
