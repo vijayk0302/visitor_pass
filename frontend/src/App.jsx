@@ -49,7 +49,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Suspense fallback={<Skeleton/>}>
+        <Suspense fallback={<div className='flex justify-center min-h-screen w-full center items-center'><h1 className='text-3xl'>Loading...</h1></div>}>
           <Routes>
             <Route element={<MainLayout />}>
               <Route path='/' element={<HomePage />} />
