@@ -4,7 +4,7 @@ import  {useAuth} from './Authcontext.jsx'
 export default function ProtectedRoute({ allowedRoles }) {
   const { user, loading } = useAuth();
  
-  if (loading) return <div className='bg-red-500'>Loading...</div>;
+  if (loading) return <div></div>;
 
 
   if (!user?.isAuthenticated) {

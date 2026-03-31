@@ -6,7 +6,7 @@ const Publicroutes = () => {
 
   if (loading) return <div>Loading...</div>;
 
-  if (user) return <Navigate to="/profile" replace />;
+  if (user) return <Navigate to="/profile"  />;
 
   return <Outlet />;
 };
