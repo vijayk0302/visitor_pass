@@ -8,7 +8,7 @@ export const passEmail = async (email,name) => {
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Visitor Pass Issued</title>
+  
   <style>
     body{
       font-family: Arial, sans-serif;

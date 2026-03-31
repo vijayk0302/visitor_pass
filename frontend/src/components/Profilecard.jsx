@@ -8,14 +8,13 @@ const Profilecard = ({ user }) => {
         <div className='max-w-md mx-auto'>
             <div className="mt-10  bg-[#111827] text-white shadow-2xl rounded-2xl p-6 transition-transform hover:scale-105 duration-300">
                 <div className="flex  flex-col items-center space-y-3">
-                    <div className="w-24 h-24 rounded-full bg-[#F59E0B] text-[#111827] flex items-center justify-center text-3xl font-bold shadow-md ring-4 ring-[#F59E0B]/40">
+                    <div className="w-22 h-22 rounded-full bg-[#F59E0B] text-[#111827] flex items-center justify-center text-3xl font-bold shadow-md ring-4 ring-[#F59E0B]/40">
                         {user.name.charAt(0).toUpperCase()}
                     </div>
 
                     <h2 className="text-2xl font-bold tracking-wide">{user.name}</h2>
                     <p className="text-gray-400 text-sm">{user.email}</p>
                 </div>
-
 
                 <div className="mt-6 bg-white/5 rounded-lg p-4 space-y-3 border border-white/10">
                     <div className="flex justify-between">

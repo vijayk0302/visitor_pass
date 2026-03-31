@@ -26,7 +26,3 @@ Card	#1F2933
 Text	#F9FAFB
 Muted	#9CA3AF
 Border	#374151
-
-
-top: 136px;
-    right [-306px];

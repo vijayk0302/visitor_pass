@@ -37,10 +37,9 @@ const Sidebarmenu = ({ setIsopen }) => {
         <img className='size-15 rounded-4xl' src={visi} alt="logo" />
       </div>
 
-      {/* <h2 className="text-2xl sm:text-4xl text-center font-bold my-2">visi.co</h2> */}
       <nav className="flex flex-col space-y-4 gap-2 mt-7.5">
 
-        {(role === 'admin' || role === 'employee' || role === 'security') && (
+        {(role !== 'visitor') && (
           <div className="flex items-center space-x-3">
             <FaLaptop className="text-xl shrink-0" />
             <span >
@@ -93,7 +92,7 @@ const Sidebarmenu = ({ setIsopen }) => {
           </div>
         )}
 
-        {(role === 'admin' || role === 'employee' || role === 'security') && (
+        {(role !== 'visitor' ) && (
           <div className="flex items-center space-x-3">
             <FaRegIdBadge className="text-xl shrink-0" />
             <span >

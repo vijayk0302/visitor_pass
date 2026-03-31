@@ -4,27 +4,24 @@ import newbg from '../assets/newbg.png'
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const Login = () => {
 
+const Login = () => {
+ 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
-
     try {
       const res = await api.post(`/api/auth/login`, {
         email,
         password,
       });
-
+  
       const role = res.data.user.role;
-
+      
       if (role === "admin") window.location.href = "/admin";
       else window.location.href = "/profile";
 
@@ -72,14 +69,6 @@ const Login = () => {
               required
             />
           </div>
-
-
-          {/* {error && (
-            <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg border border-red-500/20">
-              {error}
-            </p>
-          )} */}
-
 
           <button
             type="submit"

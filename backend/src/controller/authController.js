@@ -2,8 +2,8 @@ import { userModel } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { sendverificationcode } from "../middleware/EmailConfig/email.js";
-import { welcome } from "../middleware/EmailConfig/welcome.js";
-import { welcomeEmployee } from "../middleware/EmailConfig/welcomeEomplyee.js";
+import {welcome} from '../middleware/EmailConfig/welcome.js'
+import {welcomeEmployee} from '../middleware/EmailConfig/welcomeEomplyee.js'
 
 export const registerUser = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ export const registerUser = async (req, res) => {
       name,
       email,
       password,
-      role = "employee",
+      role = "visitor",
       status = "pending",
     } = req.body;
 
@@ -20,17 +20,6 @@ export const registerUser = async (req, res) => {
         success: false,
         msg: "All feilds required",
       });
-    }
-
-    if (role === "admin") {
-      const checkadmin = await userModel.findOne({ role: "admin" });
-      if (checkadmin) {
-        return res.status(409).json({
-          success: false,
-          msg: "Admin already exists",
-        });
-      }
-      req.body.status = "active";
     }
 
     const emailCheck = await userModel.findOne({ email });
@@ -77,10 +66,82 @@ export const registerUser = async (req, res) => {
   }
 };
 
+export const registerAdmin=async(req,res)=>{
+  try {
+  
+    const{name,email,password,role}=req.body
+
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        msg: "All feilds required",
+      });
+    }
+
+    if (role === "admin") {
+      const checkadmin = await userModel.findOne({ role: "admin" });
+      if (checkadmin) {
+        return res.status(409).json({
+          success: false,
+          msg: "Admin already exists",
+        });
+      }
+    }
+
+    const emailCheck = await userModel.findOne({ email });
+
+    if (emailCheck) {
+      return res.status(409).json({
+        success: false,
+        msg: "User already exists with provided email",
+      });
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+    req.body.password = hash;
+
+    const verificationcode = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
+
+    const user = await userModel.create({
+      name,
+      email,
+      password: hash,
+      role,
+      verificationcode,
+    });
+
+    await sendverificationcode(user.email, verificationcode);
+
+    res.status(201).json({
+      msg: "user is registered successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        role: user.role,
+        status: user.status,
+      },
+    });
+
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      msg: "Internal Server Error",
+      error: error.message,
+    });
+    
+  }
+
+}
+
 export const verify = async (req, res) => {
+
   try {
     const { code } = req.body;
+
     const user = await userModel.findOne({ verificationcode: code });
+
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -91,15 +152,13 @@ export const verify = async (req, res) => {
       user.status = "active";
     }
     user.isverified = true;
+    user.status="active"
     user.verificationcode = undefined;
 
     await user.save();
 
     if (user.role === "visitor") {
-      await welcome(user.email, user.name);
-    }
-    if (user.role !== "visitor") {
-      await welcomeEmployee(user.email, user.name);
+       await welcome(user.email, user.name);
     }
     res.status(200).json({
       success: true,
@@ -193,12 +252,16 @@ export const createuserbyAdmin = async (req, res) => {
         msg: "User already exists with this email",
       });
     }
+    const passwordbeforehash=password
     const hash = await bcrypt.hash(password, 10);
     const user = await userModel.create({
       ...req.body,
       status: "active",
       password: hash,
+      isverified : true,
     });
+
+    await welcomeEmployee(user.email,user.name,passwordbeforehash,user.role)
 
     res.status(201).json({
       msg: "user is registered successfully",

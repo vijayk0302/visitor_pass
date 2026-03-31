@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import api from '../api/api'
 import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom'
@@ -14,9 +14,7 @@ const Singlepass = () => {
   
     const fetch = async () => {
         const pass = await api.get(`/api/passes/view/${id}`)
-        setdets(pass.data)
-       
-        
+        setdets(pass.data)  
     }
 
 

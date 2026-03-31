@@ -43,7 +43,7 @@ const Editemployee = () => {
   }, [id]);
 
   return (
-    <div className="w-full flex justify-center items-center min-h-screen mt-6 px-4">
+    <div className="w-full bg-[#111827] flex justify-center items-center min-h-screen px-4">
       
       <div className="w-full max-w-md bg-[#111827] text-white p-8 rounded-2xl shadow-2xl border border-white/10">
 

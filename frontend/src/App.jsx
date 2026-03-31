@@ -1,6 +1,7 @@
 import React from 'react'
 import { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route,Outlet } from 'react-router-dom'
+import Publicroutes from './context/Publicroutes';
 
 
 const Reject =lazy(()=>import('./components/Reject'))
@@ -19,16 +20,25 @@ const Singlepass = lazy(() => import('./pages/Singlepass'))
 const Listvisitorpass = lazy(() => import('./pages/Listvisitorpass'))
 const Logs = lazy(() => import('./pages/Logs'))
 
-const MainLayout = lazy(() => import('./components/MainLayout'))
+const MainLayout = lazy(() => import('./Layout/MainLayout'))
 const Dashboardlayout = lazy(() => import('./Layout/Dashboardlayout'))
 
 const Login = lazy(() => import('./Auth/Login'))
 const Register = lazy(() => import('./Auth/Register'))
 const Verify = lazy(() => import('./Auth/Verify'))
+const Adminregister = lazy(() => import('./Auth/Adminregister'))
 
 const ProtectedRoute = lazy(() => import('./context/ProtectedRoute'))
 const ScanQR = lazy(() => import('./service/ScanQR'))
 
+const Skeleton = () => {
+  return (
+    <div className="animate-pulse space-x-4 p-1">
+      <div className="min-h-20 w-full bg-gray-300 rounded mb-4"></div>
+      <div className="size-250 bg-gray-300 rounded mb-2"></div> 
+    </div>
+  );
+};
 
 
 
@@ -39,12 +49,15 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Suspense fallback={<div className='flex justify-center items-center'>Loading...</div>}>
+        <Suspense fallback={<Skeleton/>}>
           <Routes>
             <Route element={<MainLayout />}>
+            <Route element={<Publicroutes/>}>
               <Route path='/' element={<HomePage />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
+            </Route>
+              <Route path='/register/admin' element={<Adminregister />} />
             </Route>
 
             <Route path='/verify' element={<Verify />}></Route>

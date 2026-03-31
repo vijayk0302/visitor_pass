@@ -81,7 +81,7 @@ const Appointmentfrom = () => {
 
                     <form onSubmit={handlesubmit} className="mt-6 space-y-5">
 
-                        {/* Name */}
+                       
                         <div>
                             <label className="text-sm text-gray-400">Name</label>
                             <input
@@ -91,7 +91,7 @@ const Appointmentfrom = () => {
                             />
                         </div>
 
-                        {/* Email */}
+                       
                         <div>
                             <label className="text-sm text-gray-400">Email</label>
                             <input
@@ -101,7 +101,7 @@ const Appointmentfrom = () => {
                             />
                         </div>
 
-                        {/* Phone */}
+                      
                         <div>
                             <label className="text-sm text-gray-400">Phone</label>
                             <input
@@ -115,7 +115,7 @@ const Appointmentfrom = () => {
                             />
                         </div>
 
-                        {/* Photo */}
+                       
                         <div>
                             <label className="text-sm text-gray-400">Photo</label>
                             <input
@@ -127,7 +127,7 @@ const Appointmentfrom = () => {
                             />
                         </div>
 
-                        {/* ID Proof */}
+                        
                         <div>
                             <label className="text-sm text-gray-400">ID Proof</label>
                             <input
@@ -139,7 +139,7 @@ const Appointmentfrom = () => {
                             />
                         </div>
 
-                        {/* Date */}
+                       
                         <div>
                             <label className="text-sm text-gray-400">Visit Date</label>
                             <input
@@ -151,7 +151,7 @@ const Appointmentfrom = () => {
                             />
                         </div>
 
-                        {/* Purpose */}
+                        
                         <div>
                             <label className="text-sm text-gray-400">Purpose</label>
                             <input
@@ -163,7 +163,7 @@ const Appointmentfrom = () => {
                             />
                         </div>
 
-                        {/* Button */}
+                        
                         <button
                             disabled={loading}
                             className="w-full bg-[#F59E0B] text-[#111827] py-2 rounded-lg font-semibold hover:bg-yellow-400 active:scale-95 transition disabled:opacity-60"

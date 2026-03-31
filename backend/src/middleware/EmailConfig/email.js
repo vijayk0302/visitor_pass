@@ -88,8 +88,8 @@ export const sendverificationcode = async (email, verificationcode) => {
       from: `"Visitor pass management system" ${process.env.EMAIL_USER}`,
       to: email,
       subject: "Verify your Email",
-      text: `Your verfication code is ,${verificationcode}`, // Plain-text version of the message
-      html: verification_email_template, // HTML version of the message
+      text: `Your verfication code is ,${verificationcode}`, 
+      html: verification_email_template, 
     });
     console.log("Email sent successfully");
   } catch (error) {

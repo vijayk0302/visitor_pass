@@ -5,8 +5,8 @@ import email from '../assets/Mar-Business_18.jpg'
 import { toast } from 'react-toastify';
 
 const Verify = () => {
+    
     const navigate = useNavigate();
-
     const [code, setCode] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -31,13 +31,11 @@ const Verify = () => {
         <div className="min-h-screen bg-[#111827] flex items-center justify-center px-4">
 
             <div className="w-full max-w-md bg-[#1F2937] text-white p-8 rounded-2xl shadow-2xl border border-white/10">
-
-               
+ 
                 <div className="flex justify-center">
                     <img className="h-40 object-contain" src={email} alt="verify" />
                 </div>
 
-                
                 <h1 className="text-2xl font-bold mt-4 text-center">
                     Verify Email
                 </h1>
@@ -46,7 +44,6 @@ const Verify = () => {
                     Enter the 6-digit code sent to your email
                 </p>
 
-               
                 <form onSubmit={handlesubmit} className="mt-6 space-y-5">
 
                     <input

@@ -14,8 +14,6 @@ const Profile = () => {
     status: ""
   });
 
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -26,18 +24,9 @@ const Profile = () => {
       setUser(res.data.user);
     } catch (err) {
       console.log(err);
-    } finally {
-      setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#111827] text-white flex items-center justify-center">
-        <p className="text-gray-400 animate-pulse">Loading profile...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen w-full bg-[#111827] text-white">

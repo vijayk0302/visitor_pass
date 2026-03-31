@@ -1,14 +1,11 @@
 import { transporter } from "./emailConfig.js";
 
-
-export const welcome = async (email,name) => {
-
+export const welcome = async (email, name) => {
   try {
     const welcome_email_template = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Welcome</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -76,11 +73,11 @@ export const welcome = async (email,name) => {
 
     <p class="message">
       Your account has been successfully created and verified.  
-      You can now start using the Visitor Pass Management System to manage visitors efficiently.
+      You can now log in and start using the platform to manage your visits, request passes, and access relevant services.
     </p>
 
     <p class="message">
-      We're excited to have you on board!
+      We’re glad to have you onboard and look forward to assisting you.
     </p>
 
     <a class="button" href="https://visitor-pass-ui.vercel.app/login">
@@ -99,10 +96,10 @@ export const welcome = async (email,name) => {
       from: `"Visitor pass management system" ${process.env.EMAIL_USER}`,
       to: email,
       subject: "Welcome to Visi.co",
-      html: welcome_email_template, 
+      html: welcome_email_template,
     });
     console.log("Email sent successfully");
   } catch (error) {
-    console.log(error,"error while sending email");
+    console.log(error, "error while sending email");
   }
 };

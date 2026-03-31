@@ -1,4 +1,3 @@
-import { approvalEmail } from "../middleware/EmailConfig/approvalEmail.js";
 import { userModel } from "../models/userModel.js";
 
 
@@ -48,10 +47,6 @@ export const updateuser = async (req, res) => {
       return res.status(404).json({
         msg: "user not found",
       });
-    }
-
-    if (user.status === "active") {
-      await approvalEmail(user.email, user.name);
     }
 
     res.status(200).json({

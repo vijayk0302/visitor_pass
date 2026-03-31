@@ -8,7 +8,6 @@ export const approvalEmail = async (email,name,purpose) => {
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Appointment Created</title>
   <style>
     body{
       font-family: Arial, sans-serif;
