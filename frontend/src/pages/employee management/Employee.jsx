@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Logoutbtn from '../components/Logoutbtn'
-import api from '../api/api'
+import Logoutbtn from '../../components/Logoutbtn'
 import { MdDelete } from "react-icons/md";
 import { FaUserEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'
 import { FiSearch } from "react-icons/fi";
+import api from '../../api/api';
 
 const Employee = () => {
   const navigate = useNavigate();

@@ -1,9 +1,10 @@
 import { userModel } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import { sendverificationcode } from "../middleware/EmailConfig/email.js";
-import {welcome} from '../middleware/EmailConfig/welcome.js'
-import {welcomeEmployee} from '../middleware/EmailConfig/welcomeEomplyee.js'
+import { welcome } from "../middleware/EmailConfig/welcome.js";
+import { welcomeEmployee } from "../middleware/EmailConfig/welcomeEomplyee.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -66,10 +67,9 @@ export const registerUser = async (req, res) => {
   }
 };
 
-export const registerAdmin=async(req,res)=>{
+export const registerAdmin = async (req, res) => {
   try {
-  
-    const{name,email,password,role}=req.body
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -123,20 +123,16 @@ export const registerAdmin=async(req,res)=>{
         status: user.status,
       },
     });
-
   } catch (error) {
     return res.status(400).json({
       success: false,
       msg: "Internal Server Error",
       error: error.message,
     });
-    
   }
-
-}
+};
 
 export const verify = async (req, res) => {
-
   try {
     const { code } = req.body;
 
@@ -152,13 +148,13 @@ export const verify = async (req, res) => {
       user.status = "active";
     }
     user.isverified = true;
-    user.status="active"
+    user.status = "active";
     user.verificationcode = undefined;
 
     await user.save();
 
     if (user.role === "visitor") {
-       await welcome(user.email, user.name);
+      await welcome(user.email, user.name);
     }
     res.status(200).json({
       success: true,
@@ -244,7 +240,7 @@ export const logout = (req, res) => {
 
 export const createuserbyAdmin = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, role } = req.body;
 
     const exists = await userModel.findOne({ email });
     if (exists) {
@@ -252,16 +248,21 @@ export const createuserbyAdmin = async (req, res) => {
         msg: "User already exists with this email",
       });
     }
-    const passwordbeforehash=password
-    const hash = await bcrypt.hash(password, 10);
+
     const user = await userModel.create({
       ...req.body,
       status: "active",
-      password: hash,
-      isverified : true,
+      isverified: true,
     });
 
-    await welcomeEmployee(user.email,user.name,passwordbeforehash,user.role)
+    const token = crypto.randomBytes(32).toString("hex");
+
+    user.resetToken = token;
+    user.resetTokenExpiry = Date.now() + 3600000;
+
+    await user.save();
+
+    await welcomeEmployee(user.email, user.name, user.role, token);
 
     res.status(201).json({
       msg: "user is registered successfully",
@@ -307,6 +308,30 @@ export const changepassword = async (req, res) => {
 
     res.json({ message: "Password changed successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" ,error:error.message});
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const setpassword = async (req, res) => {
+  try {   
+    const { token, password } = req.body;
+    const user = await userModel.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user.password = hashedPassword;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
+
+    res.json({ message: "Password set successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };

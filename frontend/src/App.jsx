@@ -8,13 +8,13 @@ const Reject =lazy(()=>import('./components/Reject'))
 const HomePage = lazy(() => import('./pages/HomePage'))
 const ErrorPage = lazy(() => import('./pages/ErrorPage'))
 const Profile = lazy(() => import('./pages/Profile'))
-const Dashboard = lazy(() => import('./pages/Dashboard'))
-const Employee = lazy(() => import('./pages/Employee'))
+const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'))
+const Employee = lazy(() => import('./pages/employee management/Employee'))
 const Admin = lazy(() => import('./pages/Admin'))
 const Visitors = lazy(() => import('./pages/Visitors'))
-const Editemployee = lazy(() => import('./pages/Editemployee'))
-const Appointment = lazy(() => import('./pages/Appointment'))
-const Appointmentfrom = lazy(() => import('./pages/Appointmentfrom'))
+const Editemployee = lazy(() => import('./pages/employee management/Editemployee'))
+const Appointment = lazy(() => import('./pages/appointment management/Appointment'))
+const Appointmentfrom = lazy(() => import('./pages/appointment management/Appointmentfrom'))
 const Passes = lazy(() => import('./pages/Passes'))
 const Singlepass = lazy(() => import('./pages/Singlepass'))
 const Listvisitorpass = lazy(() => import('./pages/Listvisitorpass'))
@@ -24,12 +24,13 @@ const MainLayout = lazy(() => import('./Layout/MainLayout'))
 const Dashboardlayout = lazy(() => import('./Layout/Dashboardlayout'))
 
 const Login = lazy(() => import('./Auth/Login'))
-const Register = lazy(() => import('./Auth/Register'))
+const Register = lazy(() => import('./Auth/visitor registration/Register'))
 const Verify = lazy(() => import('./Auth/Verify'))
 const Adminregister = lazy(() => import('./Auth/Adminregister'))
+const Setpassword = lazy(() => import('./Auth/Setpassword'))
 
 const ProtectedRoute = lazy(() => import('./context/ProtectedRoute'))
-const ScanQR = lazy(() => import('./service/ScanQR'))
+const ScanQR = lazy(() => import('./QR scanner/ScanQR'))
 
 const Skeleton = () => {
   return (
@@ -57,6 +58,7 @@ function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/register/admin' element={<Adminregister />} />
             </Route>
+              <Route path='/set-password' element={<Setpassword/>} />
 
             <Route path='/verify' element={<Verify />}></Route>
 

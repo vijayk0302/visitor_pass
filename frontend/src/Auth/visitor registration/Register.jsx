@@ -1,7 +1,7 @@
-import api from "../api/api.js";
+import api from "../../api/api";
 import { useState } from 'react';
-import newbg from '../assets/newbg.png'
-import login from '../assets/login.webp'
+import newbg from '../../assets/newbg.png'
+import login from '../../assets/login.webp'
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 

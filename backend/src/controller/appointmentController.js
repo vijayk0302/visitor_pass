@@ -7,6 +7,7 @@ import { approvalEmail } from "../middleware/EmailConfig/appointmentmail.js";
 import { passEmail } from "../middleware/EmailConfig/passMail.js";
 import { reject } from "../middleware/EmailConfig/rejectemail.js";
 
+
 export const createappointment = async (req, res) => {
   try {
     const { phone, idproof, visitDate, purpose } = req.body;
@@ -113,6 +114,8 @@ export const approveappointment = async (req, res) => {
         name: issuer.name,
       },
     });
+
+   
 
     await passEmail(appointment.visitor.email, appointment.visitor.name);
 

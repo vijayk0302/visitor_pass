@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import Logoutbtn from '../components/Logoutbtn'
-import api from '../api/api'
+import Logoutbtn from '../../components/Logoutbtn'
 import { FaUserEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { MdDoNotDisturbAlt } from "react-icons/md";
 import { toast } from 'react-toastify';
 import { FiSearch } from "react-icons/fi";
+import api from '../../api/api';
 
 const Appointment = () => {
   const navigate = useNavigate();
@@ -107,9 +107,9 @@ const Appointment = () => {
                         className="w-9 h-9 rounded-full object-cover"
                       />
                       <div>
-                        <p className="font-medium">{v.visitor.name}</p>
+                        <p className="font-medium">{v.visitor?.name}</p>
                         <p className="text-gray-400 text-sm">
-                          {v.visitor.email}
+                          {v.visitor?.email}
                         </p>
                       </div>
                     </td>

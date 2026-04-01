@@ -1,7 +1,7 @@
 import { transporter } from "./emailConfig.js";
 
 
-export const passEmail = async (email,name) => {
+export const passEmail = async (email,name,pdfPath) => {
 
   try {
     const pass_template = `<!DOCTYPE html>
@@ -109,6 +109,10 @@ export const passEmail = async (email,name) => {
       to: email,
       subject: "Pass created Successfully",
       html: pass_template, 
+      attachments:[{
+        filename:"visitor-pass.pdf"
+        ,path:pdfPath
+      }]
     });
     console.log("Email sent successfully");
   } catch (error) {

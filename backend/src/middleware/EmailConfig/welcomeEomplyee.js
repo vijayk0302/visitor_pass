@@ -1,6 +1,7 @@
 import { transporter } from "./emailConfig.js";
 
-export const welcomeEmployee = async (email, name, password, role) => {
+export const welcomeEmployee = async (email, name, role,token) => {
+  const link=`https://visitor-pass-ui.vercel.app/set-password?token=${token}`
   try {
     const welcome_employee_template = `<!doctype html>
 <html lang="en">
@@ -83,7 +84,6 @@ export const welcomeEmployee = async (email, name, password, role) => {
 
       <div class="credentials">
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Password:</strong> ${password}</p>
         <p><strong>Role:</strong> ${role}</p>
       </div>
 
@@ -93,8 +93,8 @@ export const welcomeEmployee = async (email, name, password, role) => {
       <p class="message">We're excited to have you on board!</p>
 
       <div style="text-align: center">
-        <a href="https://visitor-pass-ui.vercel.app/login" class="btn"
-          >Login to Your Account</a
+        <a href=${link} target="_blank" class="btn"
+          >Set your Password</a
         >
       </div>
 

@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom'
 
 
+
 const Singlepass = () => {
     const { id } = useParams()
     useEffect(() => {
@@ -23,7 +24,6 @@ const Singlepass = () => {
 
         <div className="absolute inset-0 bg-linear-to-br from-[#111827] via-[#111827] to-[#1F2937]" />
 
-        
         <div className="absolute -top-25 -left-25 w-72 h-72 bg-[#F59E0B]/20 rounded-full blur-3xl" />
         <div className="absolute -bottom-25 -right-25 w-72 h-72 bg-[#F59E0B]/10 rounded-full blur-3xl" />
 

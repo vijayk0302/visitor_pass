@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import api from '../api/api'
+import api from '../../api/api'
 import { useState, useEffect } from 'react'
 
 const Editemployee = () => {

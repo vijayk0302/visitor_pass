@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Logoutbtn from '../components/Logoutbtn'
-import api from '../api/api';
+import Logoutbtn from '../../components/Logoutbtn'
+import api from '../../api/api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

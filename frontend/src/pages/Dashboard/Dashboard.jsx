@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Logoutbtn from '../components/Logoutbtn'
-import api from '../api/api';
+import Logoutbtn from '../../components/Logoutbtn'
+import api from '../../api/api';
 import { FaUser, FaUsers } from "react-icons/fa";
 import { GiArchiveRegister } from "react-icons/gi";
 

@@ -14,7 +14,7 @@ const userSchema=new mongoose.Schema({
     },
     password: {
       type: String,
-      required: true
+      required: false
     },
     role: {
       type: String,
@@ -33,6 +33,8 @@ const userSchema=new mongoose.Schema({
     verificationcode:{
       type:String
     }
+    ,resetToken:String,
+    resetTokenExpiry:Date
 },{timestamps:true})
 
 export const userModel=mongoose.model('User',userSchema)

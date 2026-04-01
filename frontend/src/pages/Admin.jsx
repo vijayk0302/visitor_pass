@@ -10,7 +10,6 @@ const Admin = () => {
     const [user, setUser] = useState({
         name: "",
         email: "",
-        password: "",
         role: ""
     });
 
@@ -66,18 +65,6 @@ const Admin = () => {
                                 value={user.email}
                                 onChange={(e) => setUser({ ...user, email: e.target.value })}
                                 placeholder='Enter email'
-                                className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="text-sm text-gray-400">Password</label>
-                            <input
-                                type='password'
-                                value={user.password}
-                                onChange={(e) => setUser({ ...user, password: e.target.value })}
-                                placeholder='Enter password'
                                 className="w-full mt-1 px-4 py-2 bg-[#111827] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             />
