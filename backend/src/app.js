@@ -15,7 +15,7 @@ dns.setServers(["1.1.1.1","8.8.8.8"])
 const app=express();
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://visitor-pass-api.vercel.app",
   credentials: true,
   methods: ["GET","POST","PUT","DELETE","PATCH"],
 }));

@@ -23,6 +23,7 @@ export const registerUser = async (req, res) => {
       });
     }
 
+
     const emailCheck = await userModel.findOne({ email });
 
     if (emailCheck) {
@@ -33,8 +34,7 @@ export const registerUser = async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, 10);
-    req.body.password = hash;
-
+  
     const verificationcode = Math.floor(
       100000 + Math.random() * 900000,
     ).toString();

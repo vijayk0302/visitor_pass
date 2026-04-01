@@ -6,7 +6,7 @@ import * as Qr from "qrcode";
 import { approvalEmail } from "../middleware/EmailConfig/appointmentmail.js";
 import { passEmail } from "../middleware/EmailConfig/passMail.js";
 import { reject } from "../middleware/EmailConfig/rejectemail.js";
-
+import { genratePdf } from "../utils/genratePdf.js";
 
 export const createappointment = async (req, res) => {
   try {
@@ -115,9 +115,14 @@ export const approveappointment = async (req, res) => {
       },
     });
 
-   
+    await pass.populate({
+      path: "appointment",
+      populate: { path: "visitor", select: "name email" },
+    });
 
-    await passEmail(appointment.visitor.email, appointment.visitor.name);
+    const pdfBuffer = await genratePdf(pass);
+    
+    await passEmail(appointment.visitor.email, appointment.visitor.name, pdfBuffer);
 
     res.status(201).json({
       msg: "Appointment approved & Pass issued successfully",

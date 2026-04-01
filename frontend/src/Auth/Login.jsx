@@ -3,6 +3,8 @@ import api from "../api/api.js";
 import newbg from '../assets/newbg.png'
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
+import { BsEyeFill,BsEyeSlashFill } from "react-icons/bs";
+
 
 
 const Login = () => {
@@ -10,6 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [show,setShow]=useState(true)
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -31,6 +34,11 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const Togglepassword=()=>{
+    setShow(!show)
+
+  }
 
 
   return (
@@ -58,17 +66,24 @@ const Login = () => {
           </div>
 
 
-          <div>
+          <div className="relative">
             <label className="text-sm text-gray-400">Password</label>
             <input
-              type="password"
+              type={show?'password':'text'}
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
               required
             />
+            <div className="absolute text-xl right-4 bottom-3 text-gray-400">
+              {
+                show? <BsEyeFill onClick={Togglepassword} />:<BsEyeSlashFill onClick={Togglepassword} />
+              }
+           
+            </div>
           </div>
+  
 
           <button
             type="submit"

@@ -3,7 +3,7 @@ import api from "../api/api.js";
 import { useState } from 'react';
 import newbg from '../assets/newbg.png'
 import { NavLink, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 const Adminregister = () => {
     const navigate = useNavigate();
@@ -14,10 +14,14 @@ const Adminregister = () => {
         password: "",
         role: ""
     })
+    const [errors, setErrors] = useState({})
+    const [generalError, setGeneralError] = useState("");
+    const [show, setShow] = useState(true)
 
     const handlesubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setErrors({});
         try {
             const data = new FormData();
             Object.keys(formData).forEach((key) => {
@@ -27,13 +31,29 @@ const Adminregister = () => {
             navigate("/verify");
 
         } catch (err) {
-            toast.error(err.response?.data?.msg || "Sign up failed");
+            if (err.response?.data?.errors) {
+                const backendErrors = err.response.data.errors;
+
+                const formattedErrors = {};
+
+                backendErrors.forEach((e) => {
+                    formattedErrors[e.path] = e.msg;
+                });
+                setErrors(formattedErrors);
+                setGeneralError("");
+            } else {
+                setGeneralError(err.response?.data?.msg || "Something went wrong");
+                setErrors({});
+            }
         } finally {
             setLoading(false);
         }
 
     }
+    const Togglepassword = () => {
+        setShow(!show)
 
+    }
     return (
         <div
             className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
@@ -55,7 +75,7 @@ const Adminregister = () => {
                                 type='text'
                                 placeholder="Enter your name"
                                 value={formData.name}
-                                onChange={(e)=>setFormdata({...formData,name:e.target.value})}
+                                onChange={(e) => setFormdata({ ...formData, name: e.target.value })}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             />
@@ -67,29 +87,45 @@ const Adminregister = () => {
                                 type='email'
                                 placeholder="Enter your email"
                                 value={formData.email}
-                                onChange={(e)=>setFormdata({...formData,email:e.target.value})}
+                                onChange={(e) => setFormdata({ ...formData, email: e.target.value })}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             />
                         </div>
 
-                        <div>
+                        {errors.email && (
+
+                            <p className="text-red-400 p-2 rounded bg-red-500/10 border-red-500/20 text-sm" >{errors.email}</p>
+
+                        )}
+                        
+
+                        <div className='relative'>
                             <label className="text-sm text-gray-400">Password</label>
                             <input
-                                type='password'
+                                type={show ? 'password' : 'text'}
                                 placeholder="Enter your password"
                                 value={formData.password}
-                                onChange={(e)=>setFormdata({...formData,password:e.target.value})}
+                                onChange={(e) => setFormdata({ ...formData, password: e.target.value })}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             />
+                            <div className="absolute text-xl right-4 bottom-3 text-gray-400">
+                                {
+                                    show ? <BsEyeFill onClick={Togglepassword} /> : <BsEyeSlashFill onClick={Togglepassword} />
+                                }
+
+                            </div>
                         </div>
+                        {errors.password && (
+                            <p className="text-red-400 rounded p-2 bg-red-500/10 border-red-500/20 text-sm">{errors.password}</p>
+                        )}
 
                         <div>
                             <label className="text-sm text-gray-400">Select Role</label>
                             <select
                                 value={formData.role}
-                                onChange={(e)=>setFormdata({...formData,role:e.target.value})}
+                                onChange={(e) => setFormdata({ ...formData, role: e.target.value })}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             >
@@ -99,6 +135,13 @@ const Adminregister = () => {
                                 <option value="admin">admin</option>
                             </select>
                         </div>
+
+                        {generalError && (
+                            <div>
+
+                                <p className="text-red-400 rounded p-2 bg-red-500/10 border-red-500/20 text-sm">{generalError}</p>
+                            </div>
+                        )}
 
                         <button
                             type="submit"
