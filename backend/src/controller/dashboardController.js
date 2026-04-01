@@ -72,4 +72,3 @@ export const appointmentstats = async (req, res) => {
     });
   }
 };
-
