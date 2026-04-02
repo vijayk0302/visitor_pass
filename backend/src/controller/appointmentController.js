@@ -3,8 +3,7 @@ import { userModel } from "../models/userModel.js";
 import { uploadFile } from "../services/storage.service.js";
 import { passModel } from "../models/passModel.js";
 import * as Qr from "qrcode";
-
-import { genratePdf } from "../utils/genratePdf.js";
+import {generatePdf} from '../utils/genratePdf.js'
 import {
   appointmentsubmit,
   passcreated,
@@ -50,11 +49,11 @@ export const createappointment = async (req, res) => {
     });
     await appointment.populate("visitor");
 
-    await appointmentsubmit(
-      appointment.visitor.email,
-      appointment.visitor.name,
-      appointment.purpose,
-    );
+    // await appointmentsubmit(
+    //   appointment.visitor.email,
+    //   appointment.visitor.name,
+    //   appointment.purpose,
+    // );
 
     res.status(201).json({
       msg: "Appointment created, awaiting approval",
@@ -123,7 +122,11 @@ export const approveappointment = async (req, res) => {
       populate: { path: "visitor", select: "name email" },
     });
 
-    const pdfBuffer = await genratePdf(pass);
+    const pdfBuffer = await generatePdf(pass);
+
+    if (!pdfBuffer) {
+      throw new Error("PDF generation failed");
+    }
 
     await passcreated(
       appointment.visitor.email,

@@ -588,10 +588,11 @@ export async function passcreated(email, name, pdfBuffer) {
       to: [email],
       subject: "your pass has been created ",
       html: pass_template,
-      attachments: [
+      attachment: [
         {
           filename: "visitor-pass.pdf",
-          content: pdfBuffer,
+          data: pdfBuffer, 
+          contentType: "application/pdf",
         },
       ],
     });
