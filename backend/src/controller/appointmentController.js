@@ -3,10 +3,13 @@ import { userModel } from "../models/userModel.js";
 import { uploadFile } from "../services/storage.service.js";
 import { passModel } from "../models/passModel.js";
 import * as Qr from "qrcode";
-import { approvalEmail } from "../middleware/EmailConfig/appointmentmail.js";
-import { passEmail } from "../middleware/EmailConfig/passMail.js";
-import { reject } from "../middleware/EmailConfig/rejectemail.js";
+
 import { genratePdf } from "../utils/genratePdf.js";
+import {
+  appointmentsubmit,
+  passcreated,
+  reject,
+} from "../services/Emails/emailConfig.js";
 
 export const createappointment = async (req, res) => {
   try {
@@ -47,7 +50,7 @@ export const createappointment = async (req, res) => {
     });
     await appointment.populate("visitor");
 
-    await approvalEmail(
+    await appointmentsubmit(
       appointment.visitor.email,
       appointment.visitor.name,
       appointment.purpose,
@@ -121,8 +124,12 @@ export const approveappointment = async (req, res) => {
     });
 
     const pdfBuffer = await genratePdf(pass);
-    
-    await passEmail(appointment.visitor.email, appointment.visitor.name, pdfBuffer);
+
+    await passcreated(
+      appointment.visitor.email,
+      appointment.visitor.name,
+      pdfBuffer,
+    );
 
     res.status(201).json({
       msg: "Appointment approved & Pass issued successfully",
@@ -193,7 +200,7 @@ export const rejectappointment = async (req, res) => {
       )
       .populate("visitor");
 
-    reject(
+    await reject(
       appointment.visitor.email,
       appointment.visitor.name,
       appointment.remark,

@@ -2,9 +2,7 @@ import { userModel } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
-import { sendverificationcode } from "../middleware/EmailConfig/email.js";
-import { welcome } from "../middleware/EmailConfig/welcome.js";
-import { welcomeEmployee } from "../middleware/EmailConfig/welcomeEomplyee.js";
+import {verifyemail,welcomemail,welcomeemployees} from '../services/Emails/emailConfig.js'
 
 export const registerUser = async (req, res) => {
   try {
@@ -23,7 +21,6 @@ export const registerUser = async (req, res) => {
       });
     }
 
-
     const emailCheck = await userModel.findOne({ email });
 
     if (emailCheck) {
@@ -34,7 +31,7 @@ export const registerUser = async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, 10);
-  
+
     const verificationcode = Math.floor(
       100000 + Math.random() * 900000,
     ).toString();
@@ -47,7 +44,8 @@ export const registerUser = async (req, res) => {
       verificationcode,
     });
 
-    await sendverificationcode(user.email, verificationcode);
+    await verifyemail(user.email, verificationcode)
+    
 
     res.status(201).json({
       msg: "user is registered successfully",
@@ -112,7 +110,7 @@ export const registerAdmin = async (req, res) => {
       verificationcode,
     });
 
-    await sendverificationcode(user.email, verificationcode);
+    await verifyemail(user.email, verificationcode);
 
     res.status(201).json({
       msg: "user is registered successfully",
@@ -154,7 +152,7 @@ export const verify = async (req, res) => {
     await user.save();
 
     if (user.role === "visitor") {
-      await welcome(user.email, user.name);
+      await welcomemail(user.email, user.name);
     }
     res.status(200).json({
       success: true,
@@ -262,7 +260,8 @@ export const createuserbyAdmin = async (req, res) => {
 
     await user.save();
 
-    await welcomeEmployee(user.email, user.name, user.role, token);
+    await welcomeemployees(user.email, user.name, user.role, token)
+    
 
     res.status(201).json({
       msg: "user is registered successfully",
@@ -313,7 +312,7 @@ export const changepassword = async (req, res) => {
 };
 
 export const setpassword = async (req, res) => {
-  try {   
+  try {
     const { token, password } = req.body;
     const user = await userModel.findOne({
       resetToken: token,
