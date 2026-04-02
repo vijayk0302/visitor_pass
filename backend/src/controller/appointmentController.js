@@ -49,11 +49,11 @@ export const createappointment = async (req, res) => {
     });
     await appointment.populate("visitor");
 
-    // await appointmentsubmit(
-    //   appointment.visitor.email,
-    //   appointment.visitor.name,
-    //   appointment.purpose,
-    // );
+    await appointmentsubmit(
+      appointment.visitor.email,
+      appointment.visitor.name,
+      appointment.purpose,
+    );
 
     res.status(201).json({
       msg: "Appointment created, awaiting approval",

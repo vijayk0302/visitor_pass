@@ -29,7 +29,7 @@ const Logs = () => {
     const filterlogs = log.filter((u) => {
         const query = search.toLowerCase();
 
-        const name = u.checkedInBy?.name || ""; 
+        const name = u.checkedInBy?.name || "";
 
         return name.toLowerCase().includes(query);
     });
@@ -58,13 +58,13 @@ const Logs = () => {
                     >
                         Scan Visitor
                     </button>
-                    <CsvDownloader 
-                    filename="myfile"
-                    extension=".csv"
-                    className="px-4 py-2 rounded-lg border border-white/20 text-white hover:bg-white/10 transition"
-                    datas={log}
-                    text='Export CSV'/>
-                   
+                    <CsvDownloader
+                        filename="myfile"
+                        extension=".csv"
+                        className="px-4 py-2 rounded-lg border border-white/20 text-white hover:bg-white/10 transition"
+                        datas={log}
+                        text='Export CSV' />
+
                 </div>
                 <div className="relative w-full max-w-sm px-6 mt-3">
                     <FiSearch className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -150,43 +150,43 @@ const Logs = () => {
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div className="flex flex-col absolute left-25 sm:left-[50%] bottom-0 justify-center items-center gap-2 py-6">
+                <div className="flex flex-col left-25 sm:left-[50%] justify-center items-center gap-2 py-6">
 
-                <p className="text-center text-gray-400">
-                    Page {currentpage} of {totalPages}
-                </p>
-                <div className='flex justify-center items-center gap-2'>
+                    <p className="text-center text-gray-400">
+                        Page {currentpage} of {totalPages}
+                    </p>
+                    <div className='flex justify-center items-center gap-2'>
 
-                    <button
-                        onClick={() => setCurrentpage((prev) => prev - 1)}
-                        disabled={currentpage === 1}
-                        className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
-                    >
-                        Prev
-                    </button>
+                        <button
+                            onClick={() => setCurrentpage((prev) => prev - 1)}
+                            disabled={currentpage === 1}
+                            className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
+                        >
+                            Prev
+                        </button>
 
-                    {
-                        Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
-                            <button
-                                key={num}
-                                onClick={() => setCurrentpage(num)}
-                                className={`px-3 py-1 rounded ${currentpage === num
-                                    ? "bg-[#F59E0B] text-black"
-                                    : "bg-gray-700"
-                                    }`}
-                            >
-                                {num}
-                            </button>
-                        ))}
+                        {
+                            Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+                                <button
+                                    key={num}
+                                    onClick={() => setCurrentpage(num)}
+                                    className={`px-3 py-1 rounded ${currentpage === num
+                                        ? "bg-[#F59E0B] text-black"
+                                        : "bg-gray-700"
+                                        }`}
+                                >
+                                    {num}
+                                </button>
+                            ))}
 
-                    <button
-                        onClick={() => setCurrentpage((prev) => prev + 1)}
-                        disabled={currentpage === totalPages}
-                        className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
-                    >
-                        Next
-                    </button>
+                        <button
+                            onClick={() => setCurrentpage((prev) => prev + 1)}
+                            disabled={currentpage === totalPages}
+                            className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
+                        >
+                            Next
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -99,8 +99,7 @@ const Passes = () => {
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div className="flex flex-col absolute left-25 sm:left-[50%] bottom-0 justify-center items-center gap-2 py-6">
+                <div className="flex flex-col left-25 sm:left-[50%]  justify-center items-center gap-2 py-6">
 
                 <p className="text-center text-gray-400">
                     Page {currentpage} of {totalPages}
@@ -138,6 +137,8 @@ const Passes = () => {
                     </button>
                 </div>
             </div>
+            </div>
+            
         </div>
     )
 }

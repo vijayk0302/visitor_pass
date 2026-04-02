@@ -46,12 +46,12 @@ const Appointment = () => {
   })
 
   const [currentpage, setCurrentpage] = useState(1);
-    const listperpage = 5
-  
-    const totalPages = Math.ceil(filterappointment.length / listperpage);
-    const lastindex = currentpage * listperpage;
-    const firstindex = lastindex - listperpage;
-    const currentlists = filterappointment.slice(firstindex, lastindex)
+  const listperpage = 5
+
+  const totalPages = Math.ceil(filterappointment.length / listperpage);
+  const lastindex = currentpage * listperpage;
+  const firstindex = lastindex - listperpage;
+  const currentlists = filterappointment.slice(firstindex, lastindex)
 
 
   return (
@@ -138,8 +138,8 @@ const Appointment = () => {
                           disabled={v.status !== 'pending'}
                           onClick={() => approveappointment(v._id)}
                           className={`p-2 rounded-lg transition ${v.status === 'pending'
-                              ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
-                              : 'bg-gray-500/10 text-gray-500 cursor-not-allowed'
+                            ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
+                            : 'bg-gray-500/10 text-gray-500 cursor-not-allowed'
                             }`}
                         >
                           <FaUserEdit />
@@ -164,45 +164,46 @@ const Appointment = () => {
 
           </table>
         </div>
-      </div>
-      <div className="flex flex-col absolute left-25 sm:left-[50%] bottom-0 justify-center items-center gap-2 py-6">
+        <div className="flex flex-col left-25 sm:left-[50%] justify-center items-center gap-2 py-6">
 
-        <p className="text-center text-gray-400">
-          Page {currentpage} of {totalPages}
-        </p>
-        <div className='flex justify-center items-center gap-2'>
+          <p className="text-center text-gray-400">
+            Page {currentpage} of {totalPages}
+          </p>
+          <div className='flex justify-center items-center gap-2'>
 
-          <button
-            onClick={() => setCurrentpage((prev) => prev - 1)}
-            disabled={currentpage === 1}
-            className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
-          >
-            Prev
-          </button>
-
-          {
-          Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
             <button
-              key={num}
-              onClick={() => setCurrentpage(num)}
-              className={`px-3 py-1 rounded ${currentpage === num
-                ? "bg-[#F59E0B] text-black"
-                : "bg-gray-700"
-                }`}
+              onClick={() => setCurrentpage((prev) => prev - 1)}
+              disabled={currentpage === 1}
+              className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
             >
-              {num}
+              Prev
             </button>
-          ))}
 
-          <button
-            onClick={() => setCurrentpage((prev) => prev + 1)}
-            disabled={currentpage === totalPages}
-            className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
-          >
-            Next
-          </button>
+            {
+              Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+                <button
+                  key={num}
+                  onClick={() => setCurrentpage(num)}
+                  className={`px-3 py-1 rounded ${currentpage === num
+                    ? "bg-[#F59E0B] text-black"
+                    : "bg-gray-700"
+                    }`}
+                >
+                  {num}
+                </button>
+              ))}
+
+            <button
+              onClick={() => setCurrentpage((prev) => prev + 1)}
+              disabled={currentpage === totalPages}
+              className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
+
     </div>
   );
 };
