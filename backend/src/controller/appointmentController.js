@@ -3,7 +3,7 @@ import { userModel } from "../models/userModel.js";
 import { uploadFile } from "../services/storage.service.js";
 import { passModel } from "../models/passModel.js";
 import * as Qr from "qrcode";
-import {generatePdf} from '../utils/genratePdf.js'
+import { generatePdf } from "../utils/genratePdf.js";
 import {
   appointmentsubmit,
   passcreated,
@@ -99,8 +99,12 @@ export const approveappointment = async (req, res) => {
     }
 
     const visitdate = new Date(appointment.visitDate);
-    const validFrom = new Date(visitdate.setHours(9, 0, 0, 0));
-    const validTo = new Date(visitdate.setHours(16, 0, 0, 0));
+
+    const validFrom = new Date(visitdate);
+    validFrom.setHours(9, 0, 0, 0);
+
+    const validTo = new Date(visitdate);
+    validTo.setHours(16, 0, 0, 0);
 
     const issuer = await userModel.findById(req.user.id).select("name");
     if (!issuer) throw new Error("Issuer not found");
@@ -126,6 +130,10 @@ export const approveappointment = async (req, res) => {
 
     if (!pdfBuffer) {
       throw new Error("PDF generation failed");
+    }
+
+    if (!appointment.visitor || !appointment.visitor.email) {
+      throw new Error("Visitor email not found");
     }
 
     await passcreated(

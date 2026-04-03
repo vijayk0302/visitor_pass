@@ -12,6 +12,11 @@ export const scanvisitor = async (req, res) => {
 
     const currentdate = new Date();
 
+    if (currentdate > pass.validTo && pass.status !== "expired") {
+      pass.status = "expired";
+      await pass.save();
+    }
+
     if (currentdate < pass.validFrom || currentdate > pass.validTo) {
       return res.status(403).json({ msg: "Pass not valid" });
     }

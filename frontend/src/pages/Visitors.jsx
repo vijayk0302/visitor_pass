@@ -3,6 +3,7 @@ import Logoutbtn from '../components/Logoutbtn'
 import api from '../api/api'
 import { MdPendingActions } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
+import Pagination from '../components/Pagination';
 
 
 
@@ -43,7 +44,6 @@ const Visitors = () => {
 
   const [currentpage, setCurrentpage] = useState(1);
   const listperpage = 5
-
   const totalPages = Math.ceil(filtervisitor.length / listperpage);
   const lastindex = currentpage * listperpage;
   const firstindex = lastindex - listperpage;
@@ -101,44 +101,11 @@ const Visitors = () => {
             </tbody>
           </table>
         </div>
-        <div className="flex left-25 sm:left-[50%] flex-col justify-center items-center gap-2 py-6">
-
-          <p className="text-center text-gray-400">
-            Page {currentpage} of {totalPages}
-          </p>
-          <div className='flex justify-center items-center gap-2'>
-
-            <button
-              onClick={() => setCurrentpage((prev) => prev - 1)}
-              disabled={currentpage === 1}
-              className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
-            >
-              Prev
-            </button>
-
-            {
-              Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
-                <button
-                  key={num}
-                  onClick={() => setCurrentpage(num)}
-                  className={`px-3 py-1 rounded ${currentpage === num
-                    ? "bg-[#F59E0B] text-black"
-                    : "bg-gray-700"
-                    }`}
-                >
-                  {num}
-                </button>
-              ))}
-
-            <button
-              onClick={() => setCurrentpage((prev) => prev + 1)}
-              disabled={currentpage === totalPages}
-              className="px-3 py-1 bg-gray-700 rounded disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
-        </div>
+        <Pagination
+          currentpage={currentpage}
+          totalPages={totalPages}
+          setCurrentpage={setCurrentpage}
+        />
 
       </div>
     </div>
