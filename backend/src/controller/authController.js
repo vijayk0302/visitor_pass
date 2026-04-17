@@ -46,7 +46,7 @@ export const registeruser = async (req, res) => {
       verificationcode,
     });
 
-    await verifyemail(user.email, verificationcode);
+    // await verifyemail(user.email, verificationcode)
 
     res.status(201).json({
       msg: "user is registered successfully",
