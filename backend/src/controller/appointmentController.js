@@ -16,9 +16,9 @@ export const createappointment = async (req, res) => {
 
     const visitorId = req.user.id;
 
-    if (!visitorId || !visitDate || !purpose) {
+    if (!visitorId) {
       return res.status(400).json({
-        msg: "all feilds are required",
+        msg: "Visitor id not found",
       });
     }
 
@@ -30,9 +30,9 @@ export const createappointment = async (req, res) => {
       });
     }
 
-    let photourl = null;
+    let photourl = "";
 
-    if (req.file && req.file.buffer) {
+    if (req.file) {
       const fileBase64 = req.file.buffer.toString("base64");
       const result = await uploadFile(fileBase64);
       photourl = result.url;
@@ -47,6 +47,7 @@ export const createappointment = async (req, res) => {
       purpose,
       status: "pending",
     });
+
     await appointment.populate("visitor");
 
     await appointmentsubmit(
@@ -56,21 +57,21 @@ export const createappointment = async (req, res) => {
     );
 
     res.status(201).json({
-      msg: "Appointment created, awaiting approval",
-      appointment,
+      msg: "appointment created",
+      appointment: appointment,
     });
   } catch (err) {
     return res.status(500).json({
-      msg: err.message,
+      msg: "error creating appointment",
     });
   }
 };
 
 export const approveappointment = async (req, res) => {
   try {
-    const appointment = await appointmentModel
-      .findById(req.params.id)
-      .populate("visitor", "name email");
+    const id = req.params.id;
+
+    const appointment = await appointmentModel.findById(id).populate("visitor");
 
     if (!appointment) {
       return res.status(404).json({
@@ -87,28 +88,21 @@ export const approveappointment = async (req, res) => {
 
     const qrPayload = JSON.stringify({
       appointment: req.params.id,
-      issuedAt: Date.now(),
+      time: Date.now(),
     });
 
     const qrCode = await Qr.toDataURL(qrPayload);
 
-    if (!qrCode) {
-      return res.status(500).json({
-        msg: "QR code generation failed",
-      });
-    }
-
     const visitdate = new Date(appointment.visitDate);
 
     const validFrom = new Date(visitdate);
-    validFrom.setHours(9, 0, 0, 0);
+    validFrom.setHours(9, 0, 0);
 
     const validTo = new Date(visitdate);
-    validTo.setHours(16, 0, 0, 0);
+    validTo.setHours(16, 0, 0);
 
-    const issuer = await userModel.findById(req.user.id).select("name");
-    if (!issuer) throw new Error("Issuer not found");
-
+    const issuer = await userModel.findById(req.user.id);
+    
     const pass = await passModel.create({
       appointment: appointment._id,
       qrCode,
@@ -127,14 +121,6 @@ export const approveappointment = async (req, res) => {
     });
 
     const pdfBuffer = await generatePdf(pass);
-
-    if (!pdfBuffer) {
-      throw new Error("PDF generation failed");
-    }
-
-    if (!appointment.visitor || !appointment.visitor.email) {
-      throw new Error("Visitor email not found");
-    }
 
     await passcreated(
       appointment.visitor.email,

@@ -10,14 +10,9 @@ export const scanvisitor = async (req, res) => {
       return res.status(404).json({ msg: "Invalid pass" });
     }
 
-    const currentdate = new Date();
+    const now = new Date();
 
-    if (currentdate > pass.validTo && pass.status !== "expired") {
-      pass.status = "expired";
-      await pass.save();
-    }
-
-    if (currentdate < pass.validFrom || currentdate > pass.validTo) {
+    if (now < pass.validFrom || now > pass.validTo) {
       return res.status(403).json({ msg: "Pass not valid" });
     }
 
@@ -31,33 +26,18 @@ export const scanvisitor = async (req, res) => {
       pass: pass._id,
     });
 
-    if (!log && pass.status === "active") {
+    if (!log ) {
       const newLog = await checklogModel.create({
         pass: pass._id,
         checkedInBy: req.user.id,
         checkOutTime: null,
       });
-
-      await pass.populate({
-        path: "appointment",
-        select: "visitDate",
-        populate: {
-          path: "visitor",
-          select: "name",
-        },
-      });
-
-      const username = pass.appointment.visitor.name;
-      const date = pass.appointment.visitDate;
-
       pass.status = "used";
       await pass.save();
 
       return res.json({
         msg: "Visitor checked in",
         log: newLog,
-        username,
-        date,
       });
     }
 
@@ -74,11 +54,8 @@ export const scanvisitor = async (req, res) => {
       });
     }
 
-    return res.status(400).json({
-      msg: "Invalid scan state",
-    });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    res.status(500).json({ msg: "scan error" });
   }
 };
 

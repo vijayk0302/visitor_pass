@@ -2,9 +2,13 @@ import { userModel } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
-import {verifyemail,welcomemail,welcomeemployees} from '../services/Emails/emailConfig.js'
+import {
+  verifyemail,
+  welcomemail,
+  welcomeemployees,
+} from "../services/Emails/emailConfig.js";
 
-export const registerUser = async (req, res) => {
+export const registeruser = async (req, res) => {
   try {
     const {
       name,
@@ -16,8 +20,7 @@ export const registerUser = async (req, res) => {
 
     if (!name || !email || !password) {
       return res.status(400).json({
-        success: false,
-        msg: "All feilds required",
+        msg: "name email password are required",
       });
     }
 
@@ -25,8 +28,7 @@ export const registerUser = async (req, res) => {
 
     if (emailCheck) {
       return res.status(409).json({
-        success: false,
-        msg: "User already exists with provided email",
+        msg: "User already exists with this email",
       });
     }
 
@@ -44,8 +46,7 @@ export const registerUser = async (req, res) => {
       verificationcode,
     });
 
-    await verifyemail(user.email, verificationcode)
-    
+    // await verifyemail(user.email, verificationcode)
 
     res.status(201).json({
       msg: "user is registered successfully",
@@ -58,7 +59,6 @@ export const registerUser = async (req, res) => {
     });
   } catch (err) {
     return res.status(400).json({
-      success: false,
       msg: "Internal Server Error",
       error: err.message,
     });
@@ -71,7 +71,6 @@ export const registerAdmin = async (req, res) => {
 
     if (!name || !email || !password) {
       return res.status(400).json({
-        success: false,
         msg: "All feilds required",
       });
     }
@@ -80,7 +79,6 @@ export const registerAdmin = async (req, res) => {
       const checkadmin = await userModel.findOne({ role: "admin" });
       if (checkadmin) {
         return res.status(409).json({
-          success: false,
           msg: "Admin already exists",
         });
       }
@@ -90,7 +88,6 @@ export const registerAdmin = async (req, res) => {
 
     if (emailCheck) {
       return res.status(409).json({
-        success: false,
         msg: "User already exists with provided email",
       });
     }
@@ -123,7 +120,6 @@ export const registerAdmin = async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({
-      success: false,
       msg: "Internal Server Error",
       error: error.message,
     });
@@ -166,15 +162,14 @@ export const verify = async (req, res) => {
   }
 };
 
-export const loginUser = async (req, res) => {
+export const loginuser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email });
 
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        msg: "Email not found",
+    if (!email || !password) {
+      return res.status(400).json({
+        msg: "Email and password are required",
       });
     }
 
@@ -182,14 +177,12 @@ export const loginUser = async (req, res) => {
 
     if (!isMatch) {
       return res.status(400).json({
-        success: false,
-        msg: "Password is incorrect",
+        msg: "Invalid email or password",
       });
     }
     if (user.status !== "active") {
       return res.status(403).json({
-        success: false,
-        msg: "Your login is not approved by admin",
+        msg: "Your login is not approved yet",
       });
     }
 
@@ -199,6 +192,9 @@ export const loginUser = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      },
     );
 
     res.cookie("token", token, {
@@ -208,18 +204,17 @@ export const loginUser = async (req, res) => {
       path: "/",
     });
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       msg: "User logged in",
       user: {
-        id: user._id,
         name: user.name,
         role: user.role,
       },
     });
   } catch (err) {
     res.status(500).json({
-      msg: `Error message ${err.message}`,
+      msg: "Something went wrong during login",
     });
   }
 };
@@ -260,8 +255,7 @@ export const createuserbyAdmin = async (req, res) => {
 
     await user.save();
 
-    await welcomeemployees(user.email, user.name, user.role, token)
-    
+    await welcomeemployees(user.email, user.name, user.role, token);
 
     res.status(201).json({
       msg: "user is registered successfully",

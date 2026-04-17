@@ -24,8 +24,8 @@ dist-ssr
 *.sw?
 
 
-/backend/node_modules
-/fronent/node_modules
-/backend/.env
-/backend/package-lock.json
-/frontend/package-lock.json
+/Backend/node_modules
+/Fronent/node_modules
+/Backend/.env
+/Backend/package-lock.json
+/Frontend/package-lock.json
