@@ -32,17 +32,6 @@ const Setpassword = lazy(() => import('./Auth/Setpassword'))
 const ProtectedRoute = lazy(() => import('./context/ProtectedRoute'))
 const ScanQR = lazy(() => import('./QR scanner/ScanQR'))
 
-const Skeleton = () => {
-  return (
-    <div className="animate-pulse space-x-4 p-1">
-      <div className="min-h-20 w-full bg-gray-300 rounded mb-4"></div>
-      <div className="size-250 bg-gray-300 rounded mb-2"></div> 
-    </div>
-  );
-};
-
-
-
 
 function App() {
 

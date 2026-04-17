@@ -46,15 +46,13 @@ export const registeruser = async (req, res) => {
       verificationcode,
     });
 
-    // await verifyemail(user.email, verificationcode)
+    await verifyemail(user.email, verificationcode);
 
     res.status(201).json({
       msg: "user is registered successfully",
       user: {
         id: user._id,
         name: user.name,
-        role: user.role,
-        status: user.status,
       },
     });
   } catch (err) {
@@ -165,12 +163,15 @@ export const verify = async (req, res) => {
 export const loginuser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await userModel.findOne({ email });
 
     if (!email || !password) {
       return res.status(400).json({
         msg: "Email and password are required",
       });
+    }
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.json({ msg: "user not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -189,7 +190,6 @@ export const loginuser = async (req, res) => {
     const token = jwt.sign(
       {
         id: user._id,
-        role: user.role,
       },
       process.env.JWT_SECRET,
       {
@@ -197,7 +197,7 @@ export const loginuser = async (req, res) => {
       },
     );
 
-    res.cookie("token", token, {
+    res.cookie("token", token,{
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -226,7 +226,6 @@ export const logout = (req, res) => {
   });
 
   return res.status(200).json({
-    success: true,
     message: "Logged out successfully",
   });
 };

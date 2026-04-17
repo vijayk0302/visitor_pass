@@ -3,41 +3,46 @@ import api from "../api/api.js";
 import newbg from '../assets/newbg.png'
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
-import { BsEyeFill,BsEyeSlashFill } from "react-icons/bs";
+import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 
 
 const Login = () => {
- 
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [show,setShow]=useState(true)
+  const [show, setShow] = useState(true)
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     setLoading(true);
     try {
       const res = await api.post(`/api/auth/login`, {
         email,
         password,
       });
-  
-      const role = res.data.user.role;
-      
-      if (role === "admin") window.location.href = "/admin";
+
+      const user = res.data.user;
+
+      if (user.role === "admin") window.location.href = "/admin";
       else window.location.href = "/profile";
 
     } catch (err) {
-      toast.error(err.response?.data?.msg || "Login failed");
-    } finally {
+      if (err.response && err.response.data) {
+        toast.error(err.response.data.msg || "Login failed");
+      } else {
+        toast.error("Server error");
+      }
+    }
+    finally {
       setLoading(false);
     }
   };
 
-  const Togglepassword=()=>{
+  const Togglepassword = () => {
     setShow(!show)
-
   }
 
 
@@ -69,7 +74,7 @@ const Login = () => {
           <div className="relative">
             <label className="text-sm text-gray-400">Password</label>
             <input
-              type={show?'password':'text'}
+              type={show ? 'password' : 'text'}
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -78,12 +83,12 @@ const Login = () => {
             />
             <div className="absolute text-xl right-4 bottom-3 text-gray-400">
               {
-                show? <BsEyeFill onClick={Togglepassword} />:<BsEyeSlashFill onClick={Togglepassword} />
+                show ? <BsEyeFill onClick={Togglepassword} /> : <BsEyeSlashFill onClick={Togglepassword} />
               }
-           
+
             </div>
           </div>
-  
+
 
           <button
             type="submit"

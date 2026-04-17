@@ -5,7 +5,7 @@ export const authenticate = async (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.json({ msg: "no token" });
+    return res.status(401).json({ msg: "user not found" });
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -19,7 +19,7 @@ export const authenticate = async (req, res, next) => {
     next();
   } catch (err) {
     return res.status(401).json({
-      message:"Invalid Token",
+      message: "Invalid Token",
     });
   }
 };

@@ -6,72 +6,52 @@ import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 const ChangePassword = () => {
 
-    const [form, setForm] = useState({
-        oldpassword: "",
-        newpassword: "",
-        confirmpassword: ""
-    });
-    const [show, setShow] = useState({
-        old: true,
-        new: true,
-        confirm: true
-    })
-    const [errors, setErrors] = useState({})
-    const [generalError, setGeneralError] = useState("");
+    const [oldpassword, setOldpassword] = useState("");
+    const [newpassword, setNewpassword] = useState("");
+    const [confirmpassword, setConfirmpassword] = useState("");
 
+    const [show, setShow] = useState(true)
+    const [errors, setErrors] = useState('')
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({});
+        setErrors('');
 
-        if (form.newpassword !== form.confirmpassword) {
+        if (newpassword !== confirmpassword) {
             return toast.error("New passwords do not match");
         }
 
         try {
             const res = await api.post("/api/auth/change-password",
                 {
-                    oldpassword: form.oldpassword,
-                    newpassword: form.newpassword
+                    oldpassword: oldpassword,
+                    newpassword: newpassword
                 },
-                { withCredentials: true }
             );
 
-            toast(res.data?.message);
-            setForm({
-                oldpassword: "",
-                newpassword: "",
-                confirmpassword: ""
-            });
+            toast.success(res.data?.message);
 
-        } catch (error) {
-            if (error.response?.data?.errors) {
-                const backendErrors = error.response.data.errors;
+            setOldpassword(""); setNewpassword(""); setConfirmpassword("");
 
-                const formattedErrors = {};
+        } catch (err) {
+            console.log(err.response);
 
-                backendErrors.forEach((e) => {
-                    formattedErrors[e.path] = e.msg;
-                });
-                setErrors(formattedErrors);
-                setGeneralError("");
+            if (err.response && err.response.data) {
+                const data = err.response.data;
 
+                if (data.errors && data.errors.length > 0) {
+                    setErrors(data.errors[0].msg);
+                } else {
+                    toast.error(data.message || " failed to change password");
+                }
             } else {
-                toast.error(error.response?.data?.message);
-                setErrors({});
+                setErrors("Something went wrong");
             }
         }
     };
-    const Togglepassword = (field) => {
-        setShow((prev)=>({
-            ...prev,
-            [field]:!prev[field],
-        }))
-
+    const Togglepassword = () => {
+        setShow(!show)
     }
 
     return (
@@ -89,17 +69,17 @@ const ChangePassword = () => {
                     <div className="relative">
                         <label className="text-sm text-gray-400">Old Password</label>
                         <input
-                            type={show.old ? 'password' : 'text'}
+                            type={show ? 'password' : 'text'}
                             name="oldpassword"
-                            value={form.oldpassword}
-                            onChange={handleChange}
+                            value={oldpassword}
+                            onChange={(e) => setOldpassword(e.target.value)}
                             placeholder="Enter old password"
                             className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                             required
                         />
-                        <div onClick={()=>Togglepassword("old")} className="absolute text-xl right-4 bottom-3 text-gray-400">
+                        <div onClick={Togglepassword} className="absolute text-xl right-4 bottom-3 text-gray-400">
                             {
-                                show.old ? <BsEyeFill  /> : <BsEyeSlashFill  />
+                                show ? <BsEyeFill /> : <BsEyeSlashFill />
                             }
 
                         </div>
@@ -109,17 +89,17 @@ const ChangePassword = () => {
                     <div className="relative">
                         <label className="text-sm text-gray-400">New Password</label>
                         <input
-                            type={show.new ? 'password' : 'text'}
+                            type={show ? 'password' : 'text'}
                             name="newpassword"
-                            value={form.newpassword}
-                            onChange={handleChange}
+                            value={newpassword}
+                            onChange={(e) => setNewpassword(e.target.value)}
                             placeholder="Enter new password"
                             className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                             required
                         />
-                        <div onClick={()=>Togglepassword('new')} className="absolute text-xl right-4 bottom-3 text-gray-400">
+                        <div onClick={Togglepassword} className="absolute text-xl right-4 bottom-3 text-gray-400">
                             {
-                                show.new ? <BsEyeFill  /> : <BsEyeSlashFill  />
+                                show ? <BsEyeFill /> : <BsEyeSlashFill />
                             }
 
                         </div>
@@ -129,23 +109,23 @@ const ChangePassword = () => {
                     <div className="relative">
                         <label className="text-sm text-gray-400">Confirm Password</label>
                         <input
-                            type={show.confirm ? 'password' : 'text'}
+                            type={show ? 'password' : 'text'}
                             name="confirmpassword"
-                            value={form.confirmpassword}
-                            onChange={handleChange}
+                            value={confirmpassword}
+                            onChange={(e) => setConfirmpassword(e.target.value)}
                             placeholder="Confirm new password"
                             className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                             required
                         />
-                        <div onClick={()=>Togglepassword("confirm")}  className="absolute text-xl right-4 bottom-3 text-gray-400">
+                        <div onClick={Togglepassword} className="absolute text-xl right-4 bottom-3 text-gray-400">
                             {
-                                show.confirm ? <BsEyeFill onClick={Togglepassword} /> : <BsEyeSlashFill onClick={Togglepassword} />
+                                show ? <BsEyeFill /> : <BsEyeSlashFill />
                             }
 
                         </div>
                     </div>
-                    {errors.newpassword && (
-                        <p className="text-red-400 rounded p-2 bg-red-500/10 border-red-500/20 text-sm">{errors.newpassword}</p>
+                    {errors && (
+                        <p className="text-red-400 rounded p-2 bg-red-500/10 border-red-500/20 text-sm">{errors}</p>
                     )}
 
                     <button

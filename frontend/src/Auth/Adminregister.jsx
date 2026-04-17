@@ -7,48 +7,50 @@ import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 const Adminregister = () => {
     const navigate = useNavigate();
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
+
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [formData, setFormdata] = useState({
-        name: "",
-        email: "",
-        password: "",
-        role: ""
-    })
-    const [errors, setErrors] = useState({})
-    const [generalError, setGeneralError] = useState("");
-    const [show, setShow] = useState(true)
+    const [show, setShow] = useState(true);
 
     const handlesubmit = async (e) => {
         e.preventDefault();
+
         setLoading(true);
-        setErrors({});
+        setError('');
+
         try {
-            const data = new FormData();
-            Object.keys(formData).forEach((key) => {
-                data.append(key, formData[key]);
+            await api.post("/api/auth/register/admin", {
+                name: name,
+                email: email,
+                password: password,
+                role: role,
             });
-            await api.post("/api/auth/register/admin", formData);
+
             navigate("/verify");
 
         } catch (err) {
-            if (err.response?.data?.errors) {
-                const backendErrors = err.response.data.errors;
+            console.log(err);
 
-                const formattedErrors = {};
+            if (err.response && err.response.data) {
+                const data = err.response.data;
 
-                backendErrors.forEach((e) => {
-                    formattedErrors[e.path] = e.msg;
-                });
-                setErrors(formattedErrors);
-                setGeneralError("");
+                if (data.errors && data.errors.length > 0) {
+                    setError(data.errors[0].msg);
+                } else {
+                    setError(data.msg || "Registration failed");
+                }
             } else {
-                setGeneralError(err.response?.data?.msg || "Something went wrong");
-                setErrors({});
+                setError("Something went wrong");
             }
-        } finally {
+        }
+        finally {
             setLoading(false);
         }
-
     }
     const Togglepassword = () => {
         setShow(!show)
@@ -74,8 +76,8 @@ const Adminregister = () => {
                             <input
                                 type='text'
                                 placeholder="Enter your name"
-                                value={formData.name}
-                                onChange={(e) => setFormdata({ ...formData, name: e.target.value })}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             />
@@ -86,27 +88,21 @@ const Adminregister = () => {
                             <input
                                 type='email'
                                 placeholder="Enter your email"
-                                value={formData.email}
-                                onChange={(e) => setFormdata({ ...formData, email: e.target.value })}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             />
                         </div>
 
-                        {errors.email && (
-
-                            <p className="text-red-400 p-2 rounded bg-red-500/10 border-red-500/20 text-sm" >{errors.email}</p>
-
-                        )}
-                        
 
                         <div className='relative'>
                             <label className="text-sm text-gray-400">Password</label>
                             <input
                                 type={show ? 'password' : 'text'}
                                 placeholder="Enter your password"
-                                value={formData.password}
-                                onChange={(e) => setFormdata({ ...formData, password: e.target.value })}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             />
@@ -117,15 +113,12 @@ const Adminregister = () => {
 
                             </div>
                         </div>
-                        {errors.password && (
-                            <p className="text-red-400 rounded p-2 bg-red-500/10 border-red-500/20 text-sm">{errors.password}</p>
-                        )}
 
                         <div>
                             <label className="text-sm text-gray-400">Select Role</label>
                             <select
-                                value={formData.role}
-                                onChange={(e) => setFormdata({ ...formData, role: e.target.value })}
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             >
@@ -136,11 +129,10 @@ const Adminregister = () => {
                             </select>
                         </div>
 
-                        {generalError && (
-                            <div>
-
-                                <p className="text-red-400 rounded p-2 bg-red-500/10 border-red-500/20 text-sm">{generalError}</p>
-                            </div>
+                        {error && (
+                            <p className="text-red-400 text-sm bg-red-500/10 p-2 rounded">
+                                {error}
+                            </p>
                         )}
 
                         <button
