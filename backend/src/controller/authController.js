@@ -225,7 +225,7 @@ export const loginuser = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        msg: "Email not found",
+        msg: "Invalid email or password",
       });
     }
 
@@ -248,7 +248,7 @@ export const loginuser = async (req, res) => {
     // create jwt token
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // MUST be true in production (HTTPS)
+      secure: true, 
       sameSite: "None",
     });
 

@@ -16,7 +16,6 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     setLoading(true);
     try {
       const res = await api.post(`/api/auth/login`, {
@@ -25,15 +24,17 @@ const Login = () => {
       });
 
       const user = res.data.user;
+      if(!user){
+        console.log(res)
+      }
 
-      if (user.role === "admin") window.location.href = "/admin";
-      else window.location.href = "/profile";
+      if (user.role==='admin') window.location.href = "/admin";
+      else window.location.href = "/profile"
+  
 
     } catch (err) {
       if (err.response ) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error("Server error");
+        toast.warn(err.response.data.msg);
       }
     }
     finally {
