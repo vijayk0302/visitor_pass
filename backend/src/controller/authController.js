@@ -248,7 +248,8 @@ export const loginuser = async (req, res) => {
     // create jwt token
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
+      secure: true, // MUST be true in production (HTTPS)
+      sameSite: "None",
     });
 
     return res.json({
@@ -380,7 +381,7 @@ export const setpassword = async (req, res) => {
     console.log(err);
     return res.status(500).json({
       success: false,
-      msg: err.message || 'can not connect with server try again'
+      msg: err.message || "can not connect with server try again",
     });
   }
 };
