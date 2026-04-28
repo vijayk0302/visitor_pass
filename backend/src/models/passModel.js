@@ -14,12 +14,12 @@ const passSchema = new mongoose.Schema(
     },
 
     validFrom: {
-      type: String,
+      type: Date,
       required: true,
     },
 
     validTo: {
-      type: String,
+      type: Date,
       required: true,
     },
 

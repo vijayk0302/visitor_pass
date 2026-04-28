@@ -1,16 +1,25 @@
 export const authorize = (...allowedRoles) => {
   return (req, res, next) => {
-    if (!req.user || !req.user.role) {
+    if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: "Authentication required",
+        msg: "Please login",
       });
     }
 
-    if (!allowedRoles.includes(req.user.role)) {
+    const userRole=req.user.role;
+
+    if(!userRole){
       return res.status(403).json({
         success: false,
-        message: "You do not have permission to access this resource",
+        msg: "user role is not defined",
+      });
+    }
+
+    if (!allowedRoles.includes(userRole)) {
+      return res.status(403).json({
+        success: false,
+        msg: "You do not have permission to access this resource",
       });
     }
     next();

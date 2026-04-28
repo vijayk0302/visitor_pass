@@ -122,7 +122,6 @@ export const getMe = async (req, res) => {
         message: "Unauthorized",
       });
     }
-
     res.status(200).json({
       success: true,
       isAuthenticated: true,

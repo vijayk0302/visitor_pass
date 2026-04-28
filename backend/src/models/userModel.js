@@ -34,7 +34,6 @@ const userSchema=new mongoose.Schema({
       type:String
     }
     ,resetToken:String,
-    resetTokenExpiry:Date
 },{timestamps:true})
 
 export const userModel=mongoose.model('User',userSchema)

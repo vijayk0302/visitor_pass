@@ -4,6 +4,7 @@ import { useState } from 'react';
 import newbg from '../assets/newbg.png'
 import { NavLink, useNavigate } from "react-router-dom";
 import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
+import { toast } from 'react-toastify';
 
 const Adminregister = () => {
     const navigate = useNavigate();
@@ -11,55 +12,36 @@ const Adminregister = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("");
+    const role = 'admin'
 
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [show, setShow] = useState(true);
+    
 
     const handlesubmit = async (e) => {
         e.preventDefault();
-
         setLoading(true);
-        setError('');
-
         try {
-            await api.post("/api/auth/register/admin", {
+            const res = await api.post("/api/auth/register/admin", {
                 name: name,
                 email: email,
                 password: password,
-                role: role,
+                role: role
             });
 
+            toast.success(res.data.msg)
             navigate("/verify");
 
-        } catch (err) {
-            console.log(err);
-
-            if (err.response && err.response.data) {
-                const data = err.response.data;
-
-                if (data.errors && data.errors.length > 0) {
-                    setError(data.errors[0].msg);
-                } else {
-                    setError(data.msg || "Registration failed");
-                }
-            } else {
-                setError("Something went wrong");
-            }
+        } catch (error) {
+            toast.error(error.response.data.msg)
         }
         finally {
             setLoading(false);
         }
     }
-    const Togglepassword = () => {
-        setShow(!show)
-
-    }
+   
     return (
         <div
-            className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
-            style={{ backgroundImage: `url(${newbg})` }}>
+            className="relative min-h-screen flex items-center justify-center bg-cover bg-center">
             <div className="relative flex flex-col lg:flex-row items-center gap-8 px-4">
 
                 <div className="w-full max-w-md bg-[#111827] text-white p-8 rounded-2xl shadow-2xl border border-white/10">
@@ -96,44 +78,18 @@ const Adminregister = () => {
                         </div>
 
 
-                        <div className='relative'>
+                        <div >
                             <label className="text-sm text-gray-400">Password</label>
                             <input
-                                type={show ? 'password' : 'text'}
+                                type='password'
                                 placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                                 required
                             />
-                            <div className="absolute text-xl right-4 bottom-3 text-gray-400">
-                                {
-                                    show ? <BsEyeFill onClick={Togglepassword} /> : <BsEyeSlashFill onClick={Togglepassword} />
-                                }
-
-                            </div>
+                            
                         </div>
-
-                        <div>
-                            <label className="text-sm text-gray-400">Select Role</label>
-                            <select
-                                value={role}
-                                onChange={(e) => setRole(e.target.value)}
-                                className="w-full mt-1 px-4 py-2 bg-[#1F2937] border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-[#F59E0B] outline-none"
-                                required
-                            >
-                                <option value="" disabled className="text-gray-400">
-                                    -- Choose Role --
-                                </option>
-                                <option value="admin">admin</option>
-                            </select>
-                        </div>
-
-                        {error && (
-                            <p className="text-red-400 text-sm bg-red-500/10 p-2 rounded">
-                                {error}
-                            </p>
-                        )}
 
                         <button
                             type="submit"

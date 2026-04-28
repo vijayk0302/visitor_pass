@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 
 
-const Reject =lazy(()=>import('./components/Reject'))
+const Reject = lazy(() => import('./components/Reject'))
 const HomePage = lazy(() => import('./pages/HomePage'))
 const ErrorPage = lazy(() => import('./pages/ErrorPage'))
 const Profile = lazy(() => import('./pages/Profile'))
@@ -23,8 +23,9 @@ const Logs = lazy(() => import('./pages/Logs'))
 const MainLayout = lazy(() => import('./Layout/MainLayout'))
 const Dashboardlayout = lazy(() => import('./Layout/Dashboardlayout'))
 
-const Login = lazy(() => import('./Auth/Login'))
-const Register = lazy(() => import('./Auth/visitor registration/Register'))
+
+const LoginPage = lazy(() => import('./Auth/LoginPage'))
+const Register = lazy(() => import('./Auth/Register'))
 const Verify = lazy(() => import('./Auth/Verify'))
 const Adminregister = lazy(() => import('./Auth/Adminregister'))
 const Setpassword = lazy(() => import('./Auth/Setpassword'))
@@ -43,16 +44,16 @@ function App() {
           <Routes>
             <Route element={<MainLayout />}>
               <Route path='/' element={<HomePage />} />
-              <Route path='/login' element={<Login />} />
+              <Route path='/login' element={<LoginPage />} />
               <Route path='/register' element={<Register />} />
               <Route path='/register/admin' element={<Adminregister />} />
+              <Route path='/set-password' element={<Setpassword />} />
             </Route>
-              <Route path='/set-password' element={<Setpassword/>} />
 
             <Route path='/verify' element={<Verify />}></Route>
 
             <Route element={<Dashboardlayout />}>
-
+            
               <Route element={<ProtectedRoute allowedRoles={['admin', 'employee', 'security']} />}>
                 <Route path="/dashboard" element={<Dashboard />} />
               </Route>
@@ -110,7 +111,6 @@ function App() {
                 <Route path="/employees/edit/:id" element={<Editemployee />} />
               </Route>
             </Route>
-
 
             <Route path='*' element={<ErrorPage />} />
           </Routes>

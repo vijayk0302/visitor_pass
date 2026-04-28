@@ -7,14 +7,24 @@ import { IoIosAnalytics } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 import api from "../api/api.js";
 import { useEffect, useState } from "react";
-import visi from '../assets/visi.png'
-
-
+import visi from "../assets/visi.png";
 
 const Sidebarmenu = ({ setIsopen }) => {
+  const [role, setRole] = useState(null);
+
   useEffect(() => {
-    fetchProfile()
-  }, [])
+    fetchRole();
+  }, []);
+  
+  const fetchRole = async () => {
+    try {
+      const res = await api.get("/api/users/me");
+      setRole(res.data.user.role);
+    } catch (err) {
+      console.error("Failed to fetch role", err);
+    }
+  };
+
 
   const handlelogbtn = async () => {
     try {
@@ -23,104 +33,38 @@ const Sidebarmenu = ({ setIsopen }) => {
     } catch (err) {
       console.error("Logout failed", err);
     }
-  }
-  const [role, setRole] = useState(null)
-
-  const fetchProfile = async () => {
-    const res = await api.get(`/api/users/me`);
-    setRole(res.data.user.role);
   };
+
 
   return (
     <>
       <div className="flex justify-center">
-        <img className='size-15 rounded-4xl' src={visi} alt="logo" />
+        <img className="size-15 rounded-4xl" src={visi} alt="logo" />
       </div>
 
-      <nav className="flex flex-col space-y-4 gap-2 mt-7.5">
+      <nav className="flex flex-col mt-6 space-y-5">
+        {role !== 'visitor' && (<NavLink className={({ isActive }) => `flex gap-4 ${isActive ? "text-[#f59e0b]" : "text-white"}`} to={'/dashboard'} onClick={() => setIsopen(false)}><FaLaptop className="mt-1 text-lg" /> Dashboard</NavLink>)}
 
-        {(role !== 'visitor') && (
-          <div className="flex items-center space-x-3">
-            <FaLaptop className="text-xl shrink-0" />
-            <span >
-              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/dashboard"> Dashboard</NavLink>
-            </span>
-          </div>
-        )}
+        {role === 'admin' && (<NavLink className={({ isActive }) => `flex gap-4 ${isActive ? "text-[#f59e0b]" : "text-white"}`} to={'/admin'} onClick={() => setIsopen(false)}><MdAdminPanelSettings className="mt-1 text-lg" />Admin</NavLink>)}
 
-        {role === 'admin' && (
-          <div className="flex items-center space-x-3 ">
-            <MdAdminPanelSettings className="text-xl shrink-0" />
-            <span >
-              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#F59E0B]" : ""} to="/admin">Admin</NavLink>
-            </span>
-          </div>
-        )}
+        <NavLink className={({ isActive }) => `flex gap-4 ${isActive ? "text-[#f59e0b]" : "text-white"}`} to="/profile" onClick={() => setIsopen(false)}><ImProfile className="mt-1 text-lg" /> Profile</NavLink>
 
-        <div className="flex items-center space-x-3">
-          <ImProfile className="text-xl shrink-0" />
-          <span >
-            <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/profile">Profile</NavLink>
-          </span>
-        </div>
+        {role === "admin" && (<NavLink className={({ isActive }) => `flex gap-4 ${isActive ? "text-[#f59e0b]" : "text-white"}`} to="/employees" onClick={() => setIsopen(false)}><FaUser className="mt-1 text-lg" /> Employees</NavLink>)}
 
-        {(role === "admin") && (
-          <div className="flex items-center space-x-3">
-            <FaUser className="text-xl shrink-0" />
-            <span >
-              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/employees">Employees</NavLink>
-            </span>
-          </div>
+        {(role === "admin" || role === "employee") && (<NavLink className={({ isActive }) => `flex gap-4 ${isActive ? "text-[#f59e0b]" : "text-white"}`} to="/visitors" onClick={() => setIsopen(false)}><FaPerson className="mt-1 text-lg" /> Visitors</NavLink>)}
 
-        )}
+        {(role === "admin" || role === "employee") && (<NavLink className={({ isActive }) => `flex gap-4 ${isActive ? "text-[#f59e0b]" : "text-white"}`} to="/appointment" onClick={() => setIsopen(false)}><FaCalendarAlt className="mt-1 text-lg" /> Appointments</NavLink>)}
 
-        {(role === 'admin' || role === 'employee') && (
-          <div className="flex items-center space-x-3">
-            <FaPerson className="text-xl shrink-0" />
-            <span >
-              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/visitors">Visitors</NavLink>
-            </span>
-          </div>
-        )}
+        {role !== "visitor" && (<NavLink className={({ isActive }) => `flex gap-4 ${isActive ? "text-[#f59e0b]" : "text-white"}`} to="/passes" onClick={() => setIsopen(false)}><FaRegIdBadge className="mt-1 text-lg" /> Passes</NavLink>)}
 
-        {(role === 'admin' || role === 'employee') && (
-          <div className="flex items-center space-x-3">
-            <FaCalendarAlt className="text-xl shrink-0" />
-            <span >
-              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/appointment">All Appointment</NavLink>
-            </span>
-          </div>
-        )}
+        {(role === "admin" || role === "security") && (<NavLink className={({ isActive }) => `flex gap-4 ${isActive ? "text-[#f59e0b]" : "text-white"}`} to="/log" onClick={() => setIsopen(false)}><IoIosAnalytics className="mt-1 text-lg" /> Logs</NavLink>)}
 
-        {(role !== 'visitor' ) && (
-          <div className="flex items-center space-x-3">
-            <FaRegIdBadge className="text-xl shrink-0" />
-            <span >
-              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/passes">Passes</NavLink>
-            </span>
-          </div>
-        )}
-
-        {(role === 'admin' || role === 'security') && (
-          <div className="flex items-center space-x-3">
-            <IoIosAnalytics className="text-xl shrink-0" />
-            <span >
-              <NavLink onClick={() => setIsopen(false)} className={({ isActive }) => isActive ? "text-[#f59e0b]" : ""} to="/log">Visitor's Logs</NavLink>
-            </span>
-          </div>
-
-        )}
-
-        <div className="flex items-center space-x-3">
-          <CiLogout className="text-xl shrink-0" />
-          <span >
-            <NavLink onClick={handlelogbtn} >Logout</NavLink>
-          </span>
+        <div onClick={handlelogbtn} className="cursor-pointer  flex gap-4">
+          <CiLogout className="mt-1 text-lg" /> Logout
         </div>
       </nav>
-
     </>
-  )
-}
+  );
+};
 
-export default Sidebarmenu
+export default Sidebarmenu;

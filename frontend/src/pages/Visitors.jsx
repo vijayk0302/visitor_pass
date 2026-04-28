@@ -5,12 +5,9 @@ import { MdPendingActions } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import Pagination from '../components/Pagination';
 
-
-
 const Visitors = () => {
 
   const [search, setSearch] = useState("");
-
 
   const statuscolor = {
     active: 'text-green-600 text-xl cursor-pointer',

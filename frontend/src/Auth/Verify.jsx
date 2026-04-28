@@ -9,19 +9,16 @@ const Verify = () => {
     const navigate = useNavigate();
     const [code, setCode] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
 
     const handlesubmit = async (e) => {
         e.preventDefault();
-        setError("");
         setLoading(true);
-
         try {
-            await api.post(`/api/auth/verify`, { code });
+            const res=await api.post(`/api/auth/verify`, { code });
             navigate('/login');
-            toast.success('verfication successful')
+            toast.success(res.data.msg)
         } catch (error) {
-            toast.error(error?.response?.data?.message || "Verification failed");
+            toast.error(error.response.data.msg);
         } finally {
             setLoading(false);
         }
@@ -54,13 +51,6 @@ const Verify = () => {
                         placeholder="Enter verification code"
                         className="w-full px-4 py-2 bg-[#111827] border border-white/10 rounded-lg text-center tracking-widest text-lg focus:ring-2 focus:ring-[#F59E0B] outline-none"
                     />
-
-                  
-                    {error && (
-                        <p className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded-lg border border-red-500/20">
-                            {error}
-                        </p>
-                    )}
 
             
                     <button

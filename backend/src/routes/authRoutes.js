@@ -1,24 +1,20 @@
 import express from 'express'
-import {  changepassword, createuserbyAdmin, loginuser, logout, registeruser,registerAdmin, verify, setpassword } from '../controller/authController.js';
+import {  changepassword, createuserbyAdmin, loginuser, logout, registerNewUser,registerAdmin, verify, setpassword } from '../controller/authController.js';
 import {authenticate} from '../middleware/authenticatMiddleware.js'
 import { authorize } from '../middleware//authorizeMiddleware.js'
 import {preventadmin} from '../middleware/preventadminMiddleware.js'
-import { validator } from '../Validator/authvalidator.js';
-import { validate } from '../middleware/validate.js';
-import { passwordvalidator } from '../Validator/passwordvalidate.js';
-import { setpasswordvalidator } from '../Validator/setpassword.js';
 
 const authrouter= express.Router();
 
-authrouter.post('/register',validator,validate,registeruser)
-authrouter.post('/register/admin',validator,validate,registerAdmin)
+authrouter.post('/register',registerNewUser)
+authrouter.post('/register/admin',registerAdmin)
 authrouter.post('/verify',verify)
-authrouter.post('/set-password',setpasswordvalidator,validate,setpassword)
+authrouter.post('/set-password',setpassword)
 
 authrouter.post('/login',loginuser)
 authrouter.patch('/logout',authenticate,logout)
 
 authrouter.post('/create-user',authenticate,authorize('admin'),preventadmin,createuserbyAdmin)
-authrouter.post('/change-password/',authenticate,authorize('admin','employee','security','visitor'),passwordvalidator,validate,changepassword)
+authrouter.post('/change-password/',authenticate,authorize('admin','employee','security','visitor'),changepassword)
 
 export default authrouter;
