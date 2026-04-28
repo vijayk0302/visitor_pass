@@ -248,8 +248,9 @@ export const loginuser = async (req, res) => {
     // create jwt token
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, 
+      secure: true,
       sameSite: "None",
+      path: "/",
     });
 
     return res.json({
@@ -271,7 +272,12 @@ export const loginuser = async (req, res) => {
 
 // api logout
 export const logout = (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    path: "/",
+  });
   return res.json({ success: true, msg: "Logged out" });
 };
 

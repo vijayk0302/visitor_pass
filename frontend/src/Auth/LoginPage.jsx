@@ -53,7 +53,7 @@ const Login = () => {
         <h2 className="text-3xl font-bold text-center">Welcome Back</h2>
         <p className="text-gray-400 text-sm text-center mt-1">Login to your account</p>
 
-        <form onSubmit={handleLogin} className="mt-6 space-y-5">
+        <form className="mt-6 space-y-5">
 
           <div>
             <label className="text-sm text-gray-400">Email</label>
@@ -84,6 +84,7 @@ const Login = () => {
 
           <button
             type="submit"
+            onClick={handleLogin}
             disabled={loading}
             className="w-full bg-[#F59E0B] text-[#111827] py-2 rounded-lg font-semibold shadow-md hover:bg-yellow-400 active:scale-95 transition disabled:opacity-60"
           >
